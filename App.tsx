@@ -1,4 +1,12 @@
-import BottomSheet from '@components/BottomSheet';
+// Develop File
+import {BottomSheet} from './src';
+
+// Build File
+// import {BottomSheet} from './npm';
+
+// Deploy File
+// import {BottomSheet} from '@ux-monster/react-native-uikit';
+
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 

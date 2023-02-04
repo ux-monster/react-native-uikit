@@ -1686,20 +1686,10 @@
     "@typescript-eslint/types" "5.46.1"
     eslint-visitor-keys "^3.3.0"
 
-"@ux-monster/mobile-ux@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@ux-monster/mobile-ux/-/mobile-ux-0.0.5.tgz#9cb90c57a4068ebff584ca5b28957bd5a3254cd4"
-  integrity sha512-+mgPIDQd5ROmg0G1DuEWkbkZQiZxVl7oEg4UCG4An85R5cPulfxL2Y2ZsFdVyEfy7H345HmMYhD2W65oIgqq+Q==
-  dependencies:
-    "@react-navigation/native" "^6.1.1"
-    react "18.1.0"
-    react-native "0.70.6"
-    react-native-device-info "^10.3.0"
-    react-native-gesture-handler "^2.9.0"
-    react-native-haptic-feedback "^1.14.0"
-    react-native-reanimated "^2.14.4"
-    react-native-safe-area-context "^4.4.1"
-    react-native-screens "^3.18.2"
+"@ux-monster/react-native-uikit@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@ux-monster/react-native-uikit/-/react-native-uikit-0.0.1.tgz#b07828207681837c8f0e38e1c361ac1896bd4ad0"
+  integrity sha512-AfxaPQx4y4we8E+Aw//1ojYFcHQeB8hCklnF77jxwpqGRP3xwtTzyU5JNcaU4TNzLXFIHPAXhpxTJMaYr7QTcQ==
 
 abab@^2.0.3, abab@^2.0.5:
   version "2.0.6"
