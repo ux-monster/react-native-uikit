@@ -1,0 +1,13 @@
+{
+  "name": "@ux-monster/mobile-ux",
+  "version": "0.0.7",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "peerDependencies": {
+    "react": "18.2.x",
+    "react-native": "0.70.x",
+    "react-native-reanimated": "2.10.x",
+    "react-native-gesture-handler": "*",
+    "react-native-device-info": "*"
+  }
+}
