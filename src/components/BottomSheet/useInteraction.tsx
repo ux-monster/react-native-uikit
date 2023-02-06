@@ -13,17 +13,31 @@ type Props = {
 };
 
 export default function useInteraction({onClosed}: Props) {
-  const {height} = useWindowDimensions();
-  const updateVisible = () => {
-    onClosed();
-  };
+  // Styles
+  const background = useAnimatedStyle(() => {
+    return {
+      opacity: 1 - Math.min(y.value / closePosition.value, 1),
+    };
+  });
+  const bottomContainer = useAnimatedStyle(() => {
+    return {
+      backgroundColor: pressed.value ? '#fff' : '#fff',
+      transform: [{translateY: y.value}],
+    };
+  });
 
+  // Variables
+  const {height} = useWindowDimensions();
   const pressed = useSharedValue(false);
   const endPosition = 0;
   const limitPosition = 70;
   const closePosition = useSharedValue(1);
   const y = useSharedValue(height);
+  const updateVisible = () => {
+    onClosed();
+  };
 
+  // Handlers
   const handleGesture = useAnimatedGestureHandler({
     onStart: (event, ctx) => {
       console.log('onStart');
@@ -51,20 +65,6 @@ export default function useInteraction({onClosed}: Props) {
       }
     },
   });
-
-  const bottomContainer = useAnimatedStyle(() => {
-    return {
-      backgroundColor: pressed.value ? '#fff' : '#fff',
-      transform: [{translateY: y.value}],
-    };
-  });
-
-  const background = useAnimatedStyle(() => {
-    return {
-      opacity: 1 - Math.min(y.value / closePosition.value, 1),
-    };
-  });
-
   const handleBackgroundClick = () => {
     y.value = withTiming(closePosition.value, undefined, isFinished => {
       if (isFinished) {
@@ -72,8 +72,7 @@ export default function useInteraction({onClosed}: Props) {
       }
     });
   };
-
-  const handleContainerRendering = (e: LayoutChangeEvent) => {
+  const handleBottomContainerRendering = (e: LayoutChangeEvent) => {
     const _height = e.nativeEvent.layout.height;
     if (_height > 0) {
       closePosition.value = _height;
@@ -84,6 +83,6 @@ export default function useInteraction({onClosed}: Props) {
 
   return [
     {bottomContainer, background}, // animaatedStyles
-    {handleGesture, handleBackgroundClick, handleContainerRendering}, // events
+    {handleGesture, handleBackgroundClick, handleBottomContainerRendering}, // events
   ];
 }
