@@ -13,6 +13,17 @@ type Props = {
 };
 
 export default function useInteraction({onClosed}: Props) {
+  // Variables
+  const {height} = useWindowDimensions();
+  const pressed = useSharedValue(false);
+  const endPosition = 0;
+  const limitPosition = 70;
+  const closePosition = useSharedValue(1);
+  const y = useSharedValue(height);
+  const updateVisible = () => {
+    onClosed();
+  };
+
   // Styles
   const background = useAnimatedStyle(() => {
     return {
@@ -25,17 +36,6 @@ export default function useInteraction({onClosed}: Props) {
       transform: [{translateY: y.value}],
     };
   });
-
-  // Variables
-  const {height} = useWindowDimensions();
-  const pressed = useSharedValue(false);
-  const endPosition = 0;
-  const limitPosition = 70;
-  const closePosition = useSharedValue(1);
-  const y = useSharedValue(height);
-  const updateVisible = () => {
-    onClosed();
-  };
 
   // Handlers
   const handleGesture = useAnimatedGestureHandler({

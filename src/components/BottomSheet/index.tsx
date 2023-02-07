@@ -8,9 +8,9 @@ import {
 } from 'react-native-gesture-handler';
 import useInteraction from './useInteraction';
 
-type Props = {
+interface Props {
   onClosed: () => void;
-};
+}
 
 const BottomSheet = ({onClosed}: Props) => {
   const [animaatedStyles, events] = useInteraction({onClosed});
