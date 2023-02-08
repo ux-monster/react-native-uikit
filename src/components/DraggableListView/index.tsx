@@ -67,8 +67,11 @@ const DraggableItem = ({
   useAnimatedReaction(
     () => positions.value,
     (prev, current) => {
-      if (!moving) {
-        top.value = positions.value[id] * ITEM_HEIGHT;
+      if (!moving && prev[id] !== current[id]) {
+        console.log(prev[id], current[id]);
+        // if (!moving) {
+        // top.value = positions.value[id] * ITEM_HEIGHT;
+        top.value = withTiming(positions.value[id] * ITEM_HEIGHT);
       }
     },
   );
@@ -114,7 +117,7 @@ const DraggableItem = ({
 
   const updatePositions = (positionY: number) => {
     const newPosition = _.clamp(
-      Math.floor(positionY / ITEM_HEIGHT),
+      Math.floor((positionY - ITEM_HEIGHT / 2) / ITEM_HEIGHT),
       0,
       sampleData.length - 1,
     );
