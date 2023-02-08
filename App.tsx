@@ -9,12 +9,14 @@ import {BottomSheet} from './src';
 
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
+import DraggableListView from '@/components/DraggableListView';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const App = () => {
   const [visible, setVisible] = useState(false);
   return (
     <View style={{flex: 1}}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => {
           setVisible(true);
         }}
@@ -33,7 +35,8 @@ const App = () => {
             setVisible(false);
           }}
         />
-      )}
+      )} */}
+      <DraggableListView />
     </View>
   );
 };
