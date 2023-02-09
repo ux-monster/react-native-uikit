@@ -1,22 +1,11 @@
 import _ from 'lodash';
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  StatusBar,
-  Text,
-  TouchableHighlight,
-  useWindowDimensions,
-} from 'react-native';
+import React, {useState} from 'react';
+import {StatusBar, Text, useWindowDimensions, View} from 'react-native';
 import {
   GestureHandlerRootView,
-  HandlerStateChangeEvent,
-  LongPressGestureHandler,
-  LongPressGestureHandlerEventPayload,
   PanGestureHandler,
-  PanGestureHandlerEventPayload,
-  State,
 } from 'react-native-gesture-handler';
 import Animated, {
-  cancelAnimation,
   runOnJS,
   scrollTo,
   SharedValue,
@@ -90,19 +79,13 @@ const DraggableItem = ({
       left: 0,
       right: 0,
       top: top.value,
-      backgroundColor: moving ? 'green' : 'yellow',
+      backgroundColor: moving ? '#eee' : '#fff',
       zIndex: moving ? 100 : 0,
     };
   }, [moving]);
 
   const moveItem = (from: number, to: number) => {
     const newItem = Object.assign({}, positions.value);
-    console.log(
-      'moveItem - positionsValue',
-      positions.value,
-      positions.value[id],
-    );
-    // console.log('이전', positions.value);
     for (const id in positions.value) {
       if (positions.value[id] === from) {
         newItem[id] = to;
@@ -111,7 +94,6 @@ const DraggableItem = ({
         newItem[id] = from;
       }
     }
-    // console.log('이후', newItem);
     return newItem;
   };
 
@@ -127,17 +109,12 @@ const DraggableItem = ({
     }
   };
 
-  let timer = null;
-
   const gestureHandler = useAnimatedGestureHandler({
     onStart: () => {
-      console.log('onStart');
       runOnJS(setMoving)(true);
     },
     onActive: event => {
-      // console.log('onActive');
       const positionY = event.absoluteY + scrollY.value + 40;
-      // cancelAnimation(scrollY);
       top.value = positionY - ITEM_HEIGHT;
       if (!scrolling.value) {
         // Scroll Down
@@ -164,7 +141,6 @@ const DraggableItem = ({
         }
       }
       runOnJS(updatePositions)(positionY);
-      console.log('positionY - ITEM_HEIGHT', positionY - ITEM_HEIGHT);
     },
     onFinish: () => {
       top.value = positions.value[id] * ITEM_HEIGHT;
@@ -173,12 +149,35 @@ const DraggableItem = ({
   });
 
   return (
-    <Animated.View style={[{backgroundColor: 'aqua'}, animatedStyle]}>
+    <Animated.View
+      style={[
+        {
+          flexDirection: 'row',
+          alignItems: 'center',
+          borderColor: '#eee',
+          borderTopWidth: 1,
+          borderBottomWidth: 1,
+          backgroundColor: '#fff',
+        },
+        animatedStyle,
+      ]}>
       <PanGestureHandler onGestureEvent={gestureHandler}>
-        <Animated.View style={{height: ITEM_HEIGHT}}>
-          <Text style={{fontSize: 20}}>Draggable Item {id}</Text>
-        </Animated.View>
+        <Animated.View
+          style={{
+            height: ITEM_HEIGHT,
+            width: ITEM_HEIGHT,
+            backgroundColor: '#f2f2f2',
+          }}></Animated.View>
       </PanGestureHandler>
+      <View
+        style={{
+          height: ITEM_HEIGHT,
+          flexDirection: 'row',
+          alignItems: 'center',
+          flex: 1,
+        }}>
+        <Text style={{fontSize: 20, paddingLeft: 30}}>Draggable Item {id}</Text>
+      </View>
     </Animated.View>
   );
 };
@@ -208,7 +207,7 @@ const DraggableListView = () => {
   }
 
   return (
-    <GestureHandlerRootView style={{flex: 1, backgroundColor: 'pink'}}>
+    <GestureHandlerRootView style={{flex: 1, backgroundColor: '#fff'}}>
       <Animated.ScrollView
         ref={scrollViewRef}
         onScroll={handleScroll}
@@ -220,7 +219,7 @@ const DraggableListView = () => {
         }}
         contentContainerStyle={{
           height: ITEM_HEIGHT * sampleData.length,
-          backgroundColor: 'pink',
+          backgroundColor: '#999',
         }}>
         {sampleData.map((o, key) => (
           <DraggableItem
