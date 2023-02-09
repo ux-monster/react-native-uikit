@@ -31,6 +31,7 @@ import Animated, {
 
 interface DraggableItemProps {
   scrollY: SharedValue<number>;
+  scrolling: SharedValue<boolean>;
   positions: SharedValue<any>;
   setPositions: (value: SharedValue<any>) => void;
   id: string;
@@ -57,10 +58,15 @@ const sampleData = [
   {id: '14'},
   {id: '15'},
   {id: '16'},
+  {id: '17'},
+  {id: '18'},
+  {id: '19'},
+  {id: '20'},
 ];
 
 const DraggableItem = ({
   scrollY,
+  scrolling,
   positions,
   setPositions,
   id,
@@ -122,7 +128,7 @@ const DraggableItem = ({
   };
 
   let timer = null;
-  const scrolling = useSharedValue(false);
+
   const gestureHandler = useAnimatedGestureHandler({
     onStart: () => {
       console.log('onStart');
@@ -135,9 +141,12 @@ const DraggableItem = ({
       top.value = positionY - ITEM_HEIGHT;
       if (!scrolling.value) {
         // Scroll Down
-        if (event.absoluteY + ITEM_HEIGHT > dimensions.height) {
+        if (
+          event.absoluteY + ITEM_HEIGHT >
+          dimensions.height - (StatusBar.currentHeight || 0)
+        ) {
           scrolling.value = true;
-          for (let i = 0; i < 10; i++) {
+          for (let i = 0; i < sampleData.length; i++) {
             scrollY.value = Math.min(
               scrollY.value + 1,
               ITEM_HEIGHT * sampleData.length - dimensions.height + 40,
@@ -146,9 +155,9 @@ const DraggableItem = ({
           scrolling.value = false;
         }
         // Scroll Up
-        if (event.absoluteY - 40 < 0) {
+        if (event.absoluteY - ITEM_HEIGHT < 0) {
           scrolling.value = true;
-          for (let i = 0; i < 10; i++) {
+          for (let i = 0; i < sampleData.length; i++) {
             scrollY.value = Math.max(scrollY.value - 1, 0);
           }
           scrolling.value = false;
@@ -175,6 +184,7 @@ const DraggableItem = ({
 };
 
 const DraggableListView = () => {
+  const scrolling = useSharedValue(false);
   const scrollY = useSharedValue(0);
   const positions = useSharedValue(listToObject(sampleData));
   const scrollViewRef = useAnimatedRef<Animated.ScrollView>();
@@ -217,6 +227,7 @@ const DraggableListView = () => {
             key={key}
             id={o.id}
             scrollY={scrollY}
+            scrolling={scrolling}
             positions={positions}
             setPositions={newPositions => {
               positions.value = newPositions;
