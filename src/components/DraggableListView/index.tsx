@@ -52,6 +52,11 @@ const sampleData = [
   {id: '9'},
   {id: '10'},
   {id: '11'},
+  {id: '12'},
+  {id: '13'},
+  {id: '14'},
+  {id: '15'},
+  {id: '16'},
 ];
 
 const DraggableItem = ({
@@ -73,14 +78,6 @@ const DraggableItem = ({
     },
   );
 
-  useEffect(() => {
-    console.log('변경됨', id, positions.value[id]);
-  }, [positions]);
-
-  useEffect(() => {
-    console.log('DraggableItem', id, top.value);
-  }, [positions]);
-
   const animatedStyle = useAnimatedStyle(() => {
     return {
       position: 'absolute',
@@ -99,7 +96,7 @@ const DraggableItem = ({
       positions.value,
       positions.value[id],
     );
-    console.log('이전', positions.value);
+    // console.log('이전', positions.value);
     for (const id in positions.value) {
       if (positions.value[id] === from) {
         newItem[id] = to;
@@ -108,7 +105,7 @@ const DraggableItem = ({
         newItem[id] = from;
       }
     }
-    console.log('이후', newItem);
+    // console.log('이후', newItem);
     return newItem;
   };
 
@@ -125,17 +122,40 @@ const DraggableItem = ({
   };
 
   let timer = null;
+  const scrolling = useSharedValue(false);
   const gestureHandler = useAnimatedGestureHandler({
     onStart: () => {
       console.log('onStart');
       runOnJS(setMoving)(true);
     },
     onActive: event => {
-      console.log('onActive');
+      // console.log('onActive');
       const positionY = event.absoluteY + scrollY.value + 40;
       // cancelAnimation(scrollY);
       top.value = positionY - ITEM_HEIGHT;
+      if (!scrolling.value) {
+        // Scroll Down
+        if (event.absoluteY + ITEM_HEIGHT > dimensions.height) {
+          scrolling.value = true;
+          for (let i = 0; i < 10; i++) {
+            scrollY.value = Math.min(
+              scrollY.value + 1,
+              ITEM_HEIGHT * sampleData.length - dimensions.height + 40,
+            );
+          }
+          scrolling.value = false;
+        }
+        // Scroll Up
+        if (event.absoluteY - 40 < 0) {
+          scrolling.value = true;
+          for (let i = 0; i < 10; i++) {
+            scrollY.value = Math.max(scrollY.value - 1, 0);
+          }
+          scrolling.value = false;
+        }
+      }
       runOnJS(updatePositions)(positionY);
+      console.log('positionY - ITEM_HEIGHT', positionY - ITEM_HEIGHT);
     },
     onFinish: () => {
       top.value = positions.value[id] * ITEM_HEIGHT;
