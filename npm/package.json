@@ -1,14 +1,14 @@
 {
   "name": "@ux-monster/react-native-uikit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "types": "index.d.ts",
   "peerDependencies": {
     "react": "18.2.x",
     "react-native": "0.70.x",
-    "react-native-reanimated": "2.10.x",
+    "react-native-device-info": "*",
     "react-native-gesture-handler": "*",
-    "react-native-device-info": "*"
+    "react-native-reanimated": "2.10.x"
   },
   "repository": {
     "type": "git",
