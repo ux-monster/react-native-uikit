@@ -1,5 +1,6 @@
 // Develop File
 import {BottomSheet} from './src';
+import {DraggableListView} from './src';
 
 // Build File
 // import {BottomSheet} from './npm';
@@ -9,7 +10,6 @@ import {BottomSheet} from './src';
 
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import DraggableListView from '@/components/DraggableListView';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const App = () => {
@@ -36,7 +36,25 @@ const App = () => {
           }}
         />
       )} */}
-      <DraggableListView />
+      <DraggableListView
+        items={[
+          {id: '1'},
+          {id: '2'},
+          {id: '3'},
+          {id: '4'},
+          {id: '5'},
+          {id: '6'},
+          {id: '7'},
+          {id: '8'},
+          {id: '9'},
+          {id: '10'},
+          {id: '11'},
+          {id: '12'},
+          {id: '13'},
+          {id: '14'},
+          {id: '15'},
+        ]}
+      />
     </View>
   );
 };

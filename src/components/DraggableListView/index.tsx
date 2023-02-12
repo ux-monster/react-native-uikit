@@ -24,34 +24,11 @@ interface DraggableItemProps {
   positions: SharedValue<any>;
   setPositions: (value: SharedValue<any>) => void;
   id: string;
+  totalCount: number;
+  rootHeight: number;
 }
 
-const itemCount = 16;
 const ITEM_HEIGHT = 80;
-const SCROLL_HEIGHT_THRESHOLD = ITEM_HEIGHT;
-
-const sampleData = [
-  {id: '1'},
-  {id: '2'},
-  {id: '3'},
-  {id: '4'},
-  {id: '5'},
-  {id: '6'},
-  {id: '7'},
-  {id: '8'},
-  {id: '9'},
-  {id: '10'},
-  {id: '11'},
-  {id: '12'},
-  {id: '13'},
-  {id: '14'},
-  {id: '15'},
-  {id: '16'},
-  {id: '17'},
-  {id: '18'},
-  {id: '19'},
-  {id: '20'},
-];
 
 const DraggableItem = ({
   scrollY,
@@ -59,6 +36,8 @@ const DraggableItem = ({
   positions,
   setPositions,
   id,
+  totalCount,
+  rootHeight,
 }: DraggableItemProps) => {
   const dimensions = useWindowDimensions();
   const top = useSharedValue(positions.value[id] * ITEM_HEIGHT);
@@ -86,12 +65,12 @@ const DraggableItem = ({
 
   const moveItem = (from: number, to: number) => {
     const newItem = Object.assign({}, positions.value);
-    for (const id in positions.value) {
-      if (positions.value[id] === from) {
-        newItem[id] = to;
+    for (const _id in positions.value) {
+      if (positions.value[_id] === from) {
+        newItem[_id] = to;
       }
-      if (positions.value[id] === to) {
-        newItem[id] = from;
+      if (positions.value[_id] === to) {
+        newItem[_id] = from;
       }
     }
     return newItem;
@@ -101,7 +80,7 @@ const DraggableItem = ({
     const newPosition = _.clamp(
       Math.floor((positionY - ITEM_HEIGHT / 2) / ITEM_HEIGHT),
       0,
-      sampleData.length - 1,
+      totalCount - 1,
     );
     if (newPosition !== positions.value[id]) {
       const newPositions = moveItem(positions.value[id], newPosition);
@@ -123,10 +102,10 @@ const DraggableItem = ({
           dimensions.height - (StatusBar.currentHeight || 0)
         ) {
           scrolling.value = true;
-          for (let i = 0; i < sampleData.length; i++) {
+          for (let i = 0; i < totalCount; i++) {
             scrollY.value = Math.min(
               scrollY.value + 1,
-              ITEM_HEIGHT * sampleData.length - dimensions.height + 40,
+              ITEM_HEIGHT * totalCount - dimensions.height + 40,
             );
           }
           scrolling.value = false;
@@ -134,7 +113,7 @@ const DraggableItem = ({
         // Scroll Up
         if (event.absoluteY - ITEM_HEIGHT < 0) {
           scrolling.value = true;
-          for (let i = 0; i < sampleData.length; i++) {
+          for (let i = 0; i < totalCount; i++) {
             scrollY.value = Math.max(scrollY.value - 1, 0);
           }
           scrolling.value = false;
@@ -167,7 +146,8 @@ const DraggableItem = ({
             height: ITEM_HEIGHT,
             width: ITEM_HEIGHT,
             backgroundColor: '#f2f2f2',
-          }}></Animated.View>
+          }}
+        />
       </PanGestureHandler>
       <View
         style={{
@@ -182,15 +162,20 @@ const DraggableItem = ({
   );
 };
 
-const DraggableListView = () => {
+interface DraggableListViewProps {
+  items: Array<any>;
+}
+
+const DraggableListView = ({items}: DraggableListViewProps) => {
+  const [rootHeight, setRootHeight] = useState<number>(0);
   const scrolling = useSharedValue(false);
   const scrollY = useSharedValue(0);
-  const positions = useSharedValue(listToObject(sampleData));
+  const positions = useSharedValue(listToObject(items));
   const scrollViewRef = useAnimatedRef<Animated.ScrollView>();
 
   useAnimatedReaction(
     () => scrollY.value,
-    scrolling => scrollTo(scrollViewRef, 0, scrolling, false),
+    _scrolling => scrollTo(scrollViewRef, 0, _scrolling, false),
   );
 
   const handleScroll = useAnimatedScrollHandler(event => {
@@ -209,6 +194,10 @@ const DraggableListView = () => {
   return (
     <GestureHandlerRootView style={{flex: 1, backgroundColor: '#fff'}}>
       <Animated.ScrollView
+        onLayout={e => {
+          const height = e.nativeEvent.layout.height;
+          height > 0 && setRootHeight(e.nativeEvent.layout.height);
+        }}
         ref={scrollViewRef}
         onScroll={handleScroll}
         scrollEventThrottle={16}
@@ -218,10 +207,10 @@ const DraggableListView = () => {
           backgroundColor: 'white',
         }}
         contentContainerStyle={{
-          height: ITEM_HEIGHT * sampleData.length,
+          height: ITEM_HEIGHT * items.length,
           backgroundColor: '#999',
         }}>
-        {sampleData.map((o, key) => (
+        {items.map((o, key) => (
           <DraggableItem
             key={key}
             id={o.id}
@@ -231,6 +220,8 @@ const DraggableListView = () => {
             setPositions={newPositions => {
               positions.value = newPositions;
             }}
+            totalCount={items.length}
+            rootHeight={rootHeight}
           />
         ))}
       </Animated.ScrollView>
