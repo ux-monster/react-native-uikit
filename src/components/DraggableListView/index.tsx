@@ -1,6 +1,12 @@
 import _ from 'lodash';
 import React, {useState} from 'react';
-import {StatusBar, Text, useWindowDimensions, View} from 'react-native';
+import {
+  StatusBar,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import {
   GestureHandlerRootView,
   PanGestureHandler,
@@ -173,14 +179,12 @@ const DraggableListView = ({items}: DraggableListViewProps) => {
   const positions = useSharedValue(listToObject(items));
   const scrollViewRef = useAnimatedRef<Animated.ScrollView>();
 
+  // When: Changed `scrollY.value = 'dy'`
+  // Then: Scroll to 'dy'
   useAnimatedReaction(
     () => scrollY.value,
     _scrolling => scrollTo(scrollViewRef, 0, _scrolling, false),
   );
-
-  const handleScroll = useAnimatedScrollHandler(event => {
-    scrollY.value = event.contentOffset.y;
-  });
 
   function listToObject<T>(list: Array<T>) {
     const values: any = Object.values(list);
@@ -192,24 +196,21 @@ const DraggableListView = ({items}: DraggableListViewProps) => {
   }
 
   return (
-    <GestureHandlerRootView style={{flex: 1, backgroundColor: '#fff'}}>
+    <GestureHandlerRootView style={styles.root}>
       <Animated.ScrollView
         onLayout={e => {
           const height = e.nativeEvent.layout.height;
           height > 0 && setRootHeight(e.nativeEvent.layout.height);
         }}
         ref={scrollViewRef}
-        onScroll={handleScroll}
         scrollEventThrottle={16}
-        style={{
-          flex: 1,
-          position: 'relative',
-          backgroundColor: 'white',
-        }}
-        contentContainerStyle={{
-          height: ITEM_HEIGHT * items.length,
-          backgroundColor: '#999',
-        }}>
+        style={styles.scrollView}
+        contentContainerStyle={[
+          styles.scrollViewContainer,
+          {
+            height: ITEM_HEIGHT * items.length,
+          },
+        ]}>
         {items.map((o, key) => (
           <DraggableItem
             key={key}
@@ -230,3 +231,14 @@ const DraggableListView = ({items}: DraggableListViewProps) => {
 };
 
 export default DraggableListView;
+
+const styles = StyleSheet.create({
+  root: {flex: 1, backgroundColor: '#fff'},
+  scrollView: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  scrollViewContainer: {
+    position: 'relative',
+  },
+});
