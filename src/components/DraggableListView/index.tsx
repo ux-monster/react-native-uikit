@@ -18,7 +18,6 @@ import Animated, {
   useAnimatedGestureHandler,
   useAnimatedReaction,
   useAnimatedRef,
-  useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -47,17 +46,24 @@ const DraggableItem = ({
 }: DraggableItemProps) => {
   const dimensions = useWindowDimensions();
   const top = useSharedValue(positions.value[id] * ITEM_HEIGHT);
+
+  // 움직이는 애니메이션 도중인 경우에는 컴포넌트의 Y 좌표를 변경하지 않도록 하기 위한 플래그
   const [moving, setMoving] = useState(false);
 
+  // 애니메이션 실행 : 현재 컴포넌트의 순서가 변경될 때
   useAnimatedReaction(
     () => positions.value[id],
     (prev, current) => {
+      // 현재 멈춰있고, 이전 값과 다른 경우에만 Y 좌표를 변경함
       if (!moving && prev !== current) {
         top.value = withTiming(positions.value[id] * ITEM_HEIGHT);
       }
     },
   );
 
+  // useAnimatedStyle : 애니메이션을 위한 스타일을 선언해주기 위한 훅
+  // 1) 스타일 : 높이 값이 변경되는 경우
+  // 2) 움직이는중 / 멈춰있음 상태에 따라서 배경색 변경
   const animatedStyle = useAnimatedStyle(() => {
     return {
       position: 'absolute',
@@ -69,8 +75,12 @@ const DraggableItem = ({
     };
   }, [moving]);
 
+  // 두 요소의 순서를 바꾼 후, 갱신된 포지션 스테이트를 [리턴한다]
   const moveItem = (from: number, to: number) => {
+    // 새로운 객체로 인식하기 위해 Object.assion({}, prevObject)를 사용함
     const newItem = Object.assign({}, positions.value);
+
+    // 모든 요소의 순서에 대한 데이터를 보관중인 positions.value 객체에서 [from <-> to] 두 순서를 바꿈
     for (const _id in positions.value) {
       if (positions.value[_id] === from) {
         newItem[_id] = to;
@@ -82,42 +92,61 @@ const DraggableItem = ({
     return newItem;
   };
 
+  // 두 요소의 순서를 바꾼 후, 갱신된 포지션 스테이트를 [반영한다]
   const updatePositions = (positionY: number) => {
-    const newPosition = _.clamp(
-      Math.floor((positionY - ITEM_HEIGHT / 2) / ITEM_HEIGHT),
-      0,
-      totalCount - 1,
+    const _newPosition = Math.floor(positionY / ITEM_HEIGHT);
+    const _minPosition = 0;
+    const _maxPosition = totalCount - 1;
+
+    const newLimitedPosition = _.clamp(
+      _newPosition,
+      _minPosition,
+      _maxPosition,
     );
-    if (newPosition !== positions.value[id]) {
-      const newPositions = moveItem(positions.value[id], newPosition);
+
+    const isChanged = newLimitedPosition !== positions.value[id];
+    if (isChanged) {
+      const prevPosition = positions.value[id];
+      const nextPosition = newLimitedPosition;
+      const newPositions = moveItem(prevPosition, nextPosition);
       setPositions(newPositions);
     }
   };
 
   const gestureHandler = useAnimatedGestureHandler({
     onStart: () => {
+      // 해당 요소를 터치하기 시작했다면 그 값을 반영해준다. (자바스크립트 스레드)
       runOnJS(setMoving)(true);
     },
     onActive: event => {
-      const positionY = event.absoluteY + scrollY.value + 40;
-      top.value = positionY - ITEM_HEIGHT;
-      if (!scrolling.value) {
+      const _dy_fromContainer = event.absoluteY;
+      const _dy_scroll = scrollY.value;
+      const _dy_halfOfItem = ITEM_HEIGHT / 2;
+
+      const positionY = _dy_fromContainer + _dy_scroll - _dy_halfOfItem;
+      top.value = positionY;
+
+      console.log(_dy_fromContainer);
+
+      const isNotScrolling = !scrolling.value;
+      if (isNotScrolling) {
         // Scroll Down
-        if (
-          event.absoluteY + ITEM_HEIGHT >
-          dimensions.height - (StatusBar.currentHeight || 0)
-        ) {
+        const _scrollOffset = ITEM_HEIGHT;
+        const _deviceHeight = dimensions.height;
+        const scrollDownPoint = _deviceHeight - _scrollOffset;
+        if (_dy_fromContainer > scrollDownPoint) {
           scrolling.value = true;
           for (let i = 0; i < totalCount; i++) {
             scrollY.value = Math.min(
               scrollY.value + 1,
-              ITEM_HEIGHT * totalCount - dimensions.height + 40,
+              ITEM_HEIGHT * totalCount - dimensions.height,
             );
           }
           scrolling.value = false;
         }
         // Scroll Up
-        if (event.absoluteY - ITEM_HEIGHT < 0) {
+        const scrollUpPoint = ITEM_HEIGHT;
+        if (_dy_fromContainer < scrollUpPoint) {
           scrolling.value = true;
           for (let i = 0; i < totalCount; i++) {
             scrollY.value = Math.max(scrollY.value - 1, 0);
@@ -128,7 +157,8 @@ const DraggableItem = ({
       runOnJS(updatePositions)(positionY);
     },
     onFinish: () => {
-      top.value = positions.value[id] * ITEM_HEIGHT;
+      const dy = positions.value[id] * ITEM_HEIGHT;
+      top.value = dy;
       runOnJS(setMoving)(false);
     },
   });
