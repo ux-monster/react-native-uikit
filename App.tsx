@@ -11,11 +11,28 @@ import {DraggableListView} from './src';
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import RootSiblings from 'react-native-root-siblings';
 
 const App = () => {
   const [visible, setVisible] = useState(false);
+
+  const showBottomSheet = () => {
+    const component = new RootSiblings(
+      (
+        <BottomSheet
+          onClosed={() => {
+            component.destroy();
+          }}
+        />
+      ),
+    );
+  };
+
   return (
     <View style={{flex: 1}}>
+      <TouchableOpacity onPress={showBottomSheet}>
+        <Text>Open BottomSheet - ROOT</Text>
+      </TouchableOpacity>
       {/* <TouchableOpacity
         onPress={() => {
           setVisible(true);

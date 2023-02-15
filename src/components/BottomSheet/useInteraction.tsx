@@ -1,4 +1,3 @@
-import React from 'react';
 import {LayoutChangeEvent, useWindowDimensions} from 'react-native';
 import {
   runOnJS,
