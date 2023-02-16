@@ -10,73 +10,55 @@ import {DraggableListView} from './src';
 
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import RootSiblings from 'react-native-root-siblings';
+import {RootSiblingParent} from 'react-native-root-siblings';
 
 const App = () => {
   const [visible, setVisible] = useState(false);
-
-  const showBottomSheet = () => {
-    const component = new RootSiblings(
-      (
-        <BottomSheet
-          onClosed={() => {
-            component.destroy();
-          }}
-        />
-      ),
-    );
-  };
-
   return (
-    <View style={{flex: 1}}>
-      <TouchableOpacity
-        onPress={showBottomSheet}
-        onLayout={e => console.log('위높이', e.nativeEvent.layout.height)}>
-        <Text>Open BottomSheet - ROOT</Text>
-        <Text>Open BottomSheet - ROOT</Text>
-        <Text>Open BottomSheet - ROOT</Text>
-      </TouchableOpacity>
-      {/* <TouchableOpacity
-        onPress={() => {
-          setVisible(true);
-        }}
-        style={{
-          marginTop: 40,
-          padding: 20,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#dfdfdf',
-        }}>
-        <Text>Open BottomSheet</Text>
-      </TouchableOpacity>
-      {visible && (
-        <BottomSheet
-          onClosed={() => {
-            setVisible(false);
+    <RootSiblingParent>
+      <View style={{flex: 1}}>
+        <TouchableOpacity
+          onPress={() => {
+            setVisible(true);
           }}
+          style={{
+            marginTop: 40,
+            padding: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#dfdfdf',
+          }}>
+          <Text>Open BottomSheet</Text>
+        </TouchableOpacity>
+        {visible && (
+          <BottomSheet
+            onClosed={() => {
+              setVisible(false);
+            }}>
+            {/* <Text>This is a BottomSheet</Text> */}
+          </BottomSheet>
+        )}
+        <DraggableListView
+          items={[
+            {id: '1'},
+            {id: '2'},
+            {id: '3'},
+            {id: '4'},
+            {id: '5'},
+            {id: '6'},
+            {id: '7'},
+            {id: '8'},
+            {id: '9'},
+            {id: '10'},
+            {id: '11'},
+            {id: '12'},
+            {id: '13'},
+            {id: '14'},
+            {id: '15'},
+          ]}
         />
-      )} */}
-      <DraggableListView
-        items={[
-          {id: '1'},
-          {id: '2'},
-          {id: '3'},
-          {id: '4'},
-          {id: '5'},
-          {id: '6'},
-          {id: '7'},
-          {id: '8'},
-          {id: '9'},
-          {id: '10'},
-          {id: '11'},
-          {id: '12'},
-          {id: '13'},
-          {id: '14'},
-          {id: '15'},
-        ]}
-      />
-    </View>
+      </View>
+    </RootSiblingParent>
   );
 };
 

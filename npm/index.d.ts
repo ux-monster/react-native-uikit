@@ -1,2 +1,3 @@
 import BottomSheet from './components/BottomSheet';
-export { BottomSheet };
+import DraggableListView from './components/DraggableListView';
+export { BottomSheet, DraggableListView };

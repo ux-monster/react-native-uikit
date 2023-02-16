@@ -1,9 +1,11 @@
 > This version is not yet complete...
 
-Installing the package
+# Installing the package
 
-```sh
-yarn add react-native-reanimated react-native-device-info react-native-gesture-handler
+```
+yarn add react-native-reanimated
+yarn add react-native-device-info
+yarn add react-native-gesture-handler
 ```
 
 # Babel plugin
@@ -37,14 +39,32 @@ If you're using Proguard, make sure to add rules preventing it from optimizing T
 -keep class com.facebook.react.turbomodule.** { *; }
 ```
 
-# Components
+# Getting Started
 
-## BottomSheet
+### 1) When modifying or creating a component
 
 ```tsx
+import {BottomSheet} from './src';
+```
+
+### 2) When you need to test after build and before deployment
+
+```tsx
+import {BottomSheet} from './npm';
+```
+
+### 3) When to test after deployment
+
+```tsx
+import {BottomSheet} from '@ux-monster/react-native-uikit';
+```
+
+### 4) Sample code - BottomSheet
+
+```tsx
+import {BottomSheet} from '@ux-monster/react-native-uikit';
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {BottomSheet} from 'react-native-uikit';
 
 const App = () => {
   const [visible, setVisible] = useState(false);

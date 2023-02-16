@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {Modal, TouchableOpacity} from 'react-native';
 import {StyleSheet, View} from 'react-native';
 import Animated from 'react-native-reanimated';
 import {
@@ -7,15 +7,16 @@ import {
   PanGestureHandler,
 } from 'react-native-gesture-handler';
 import useInteraction from './useInteraction';
-
+import RootSiblings from 'react-native-root-siblings';
 interface Props {
+  children?: React.ReactNode;
   onClosed: () => void;
 }
 
-const BottomSheet = ({onClosed}: Props) => {
+const BottomSheet = ({children, onClosed}: Props) => {
   const [animaatedStyles, events] = useInteraction({onClosed});
   return (
-    <View style={styles.container}>
+    <Modal style={styles.container} transparent>
       <Animated.View style={[styles.background, animaatedStyles.background]} />
       <GestureHandlerRootView style={styles.gestureContainer}>
         <TouchableOpacity
@@ -28,15 +29,31 @@ const BottomSheet = ({onClosed}: Props) => {
           <PanGestureHandler onGestureEvent={events.handleGesture}>
             <Animated.View style={styles.barContainer}>
               <View style={styles.bar} />
+              <View>{children}</View>
             </Animated.View>
           </PanGestureHandler>
         </Animated.View>
       </GestureHandlerRootView>
-    </View>
+    </Modal>
   );
 };
 
-export default BottomSheet;
+const showBottomSheet = (onClosed: () => void) => {
+  const component = new RootSiblings(
+    (
+      <BottomSheet
+        onClosed={() => {
+          component.destroy();
+          onClosed();
+        }}
+      />
+    ),
+  );
+};
+
+export default Object.assign(BottomSheet, {
+  showBottomSheet,
+});
 
 const styles = StyleSheet.create({
   container: {
