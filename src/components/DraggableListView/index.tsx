@@ -1,12 +1,6 @@
 import _ from 'lodash';
 import React, {useState} from 'react';
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import {StatusBar, StyleSheet, Text, View} from 'react-native';
 import {
   GestureHandlerRootView,
   PanGestureHandler,
@@ -51,7 +45,6 @@ const DraggableItem = ({
   totalCount,
   scrollVeiwMeasureState,
 }: DraggableItemProps) => {
-  const dimensions = useWindowDimensions();
   const top = useSharedValue(positions.value[id] * ITEM_HEIGHT);
 
   // 움직이는 애니메이션 도중인 경우에는 컴포넌트의 Y 좌표를 변경하지 않도록 하기 위한 플래그
