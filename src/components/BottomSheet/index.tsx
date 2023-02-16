@@ -27,7 +27,7 @@ const BottomSheet = ({onClosed}: Props) => {
           onLayout={events.handleBottomContainerRendering}>
           <PanGestureHandler onGestureEvent={events.handleGesture}>
             <Animated.View style={styles.barContainer}>
-              <View style={styles.bar}></View>
+              <View style={styles.bar} />
             </Animated.View>
           </PanGestureHandler>
         </Animated.View>

@@ -30,7 +30,11 @@ const App = () => {
 
   return (
     <View style={{flex: 1}}>
-      <TouchableOpacity onPress={showBottomSheet}>
+      <TouchableOpacity
+        onPress={showBottomSheet}
+        onLayout={e => console.log('위높이', e.nativeEvent.layout.height)}>
+        <Text>Open BottomSheet - ROOT</Text>
+        <Text>Open BottomSheet - ROOT</Text>
         <Text>Open BottomSheet - ROOT</Text>
       </TouchableOpacity>
       {/* <TouchableOpacity

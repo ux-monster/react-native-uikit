@@ -30,7 +30,14 @@ interface DraggableItemProps {
   setPositions: (value: SharedValue<any>) => void;
   id: string;
   totalCount: number;
-  rootHeight: number;
+  scrollVeiwMeasureState: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    pageX: number;
+    pageY: number;
+  };
 }
 
 const ITEM_HEIGHT = 80;
@@ -42,7 +49,7 @@ const DraggableItem = ({
   setPositions,
   id,
   totalCount,
-  rootHeight,
+  scrollVeiwMeasureState,
 }: DraggableItemProps) => {
   const dimensions = useWindowDimensions();
   const top = useSharedValue(positions.value[id] * ITEM_HEIGHT);
@@ -119,27 +126,29 @@ const DraggableItem = ({
       runOnJS(setMoving)(true);
     },
     onActive: event => {
-      const _dy_fromContainer = event.absoluteY;
+      const _dy_fromContainer = event.absoluteY - scrollVeiwMeasureState.pageY;
       const _dy_scroll = scrollY.value;
       const _dy_halfOfItem = ITEM_HEIGHT / 2;
 
       const positionY = _dy_fromContainer + _dy_scroll - _dy_halfOfItem;
       top.value = positionY;
 
-      console.log(_dy_fromContainer);
-
       const isNotScrolling = !scrolling.value;
       if (isNotScrolling) {
         // Scroll Down
         const _scrollOffset = ITEM_HEIGHT;
-        const _deviceHeight = dimensions.height;
-        const scrollDownPoint = _deviceHeight - _scrollOffset;
+        // const _containerHeight = scrollVeiwMeasureState.height;
+        const scrollDownPoint =
+          scrollVeiwMeasureState.height +
+          scrollVeiwMeasureState.pageY -
+          _scrollOffset -
+          (StatusBar.currentHeight || 0);
         if (_dy_fromContainer > scrollDownPoint) {
           scrolling.value = true;
           for (let i = 0; i < totalCount; i++) {
             scrollY.value = Math.min(
               scrollY.value + 1,
-              ITEM_HEIGHT * totalCount - dimensions.height,
+              ITEM_HEIGHT * totalCount - scrollVeiwMeasureState.height,
             );
           }
           scrolling.value = false;
@@ -203,7 +212,14 @@ interface DraggableListViewProps {
 }
 
 const DraggableListView = ({items}: DraggableListViewProps) => {
-  const [rootHeight, setRootHeight] = useState<number>(0);
+  const [scrollVeiwMeasureState, setScrollViewMeasureState] = useState({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    pageX: 0,
+    pageY: 0,
+  });
   const scrolling = useSharedValue(false);
   const scrollY = useSharedValue(0);
   const positions = useSharedValue(listToObject(items));
@@ -229,8 +245,9 @@ const DraggableListView = ({items}: DraggableListViewProps) => {
     <GestureHandlerRootView style={styles.root}>
       <Animated.ScrollView
         onLayout={e => {
-          const height = e.nativeEvent.layout.height;
-          height > 0 && setRootHeight(e.nativeEvent.layout.height);
+          e.target.measure((x, y, width, height, pageX, pageY) => {
+            setScrollViewMeasureState({x, y, width, height, pageX, pageY});
+          });
         }}
         ref={scrollViewRef}
         scrollEventThrottle={16}
@@ -252,7 +269,7 @@ const DraggableListView = ({items}: DraggableListViewProps) => {
               positions.value = newPositions;
             }}
             totalCount={items.length}
-            rootHeight={rootHeight}
+            scrollVeiwMeasureState={scrollVeiwMeasureState}
           />
         ))}
       </Animated.ScrollView>
