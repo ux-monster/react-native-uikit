@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
   bottomContainer: {
     backgroundColor: '#ffffff',
     marginTop: 'auto',
-    height: 500, // TODO - Remove
     borderRadius: 32,
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,

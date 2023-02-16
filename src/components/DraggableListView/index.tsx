@@ -12,6 +12,7 @@ import Animated, {
   useAnimatedGestureHandler,
   useAnimatedReaction,
   useAnimatedRef,
+  useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -130,12 +131,10 @@ const DraggableItem = ({
       if (isNotScrolling) {
         // Scroll Down
         const _scrollOffset = ITEM_HEIGHT;
-        // const _containerHeight = scrollVeiwMeasureState.height;
         const scrollDownPoint =
           scrollVeiwMeasureState.height +
           scrollVeiwMeasureState.pageY -
-          _scrollOffset -
-          (StatusBar.currentHeight || 0);
+          2.5 * _scrollOffset;
         if (_dy_fromContainer > scrollDownPoint) {
           scrolling.value = true;
           for (let i = 0; i < totalCount; i++) {
@@ -147,7 +146,7 @@ const DraggableItem = ({
           scrolling.value = false;
         }
         // Scroll Up
-        const scrollUpPoint = ITEM_HEIGHT;
+        const scrollUpPoint = _scrollOffset;
         if (_dy_fromContainer < scrollUpPoint) {
           scrolling.value = true;
           for (let i = 0; i < totalCount; i++) {
@@ -234,9 +233,14 @@ const DraggableListView = ({items}: DraggableListViewProps) => {
     return object;
   }
 
+  const handleScroll = useAnimatedScrollHandler(event => {
+    scrollY.value = event.contentOffset.y;
+  });
+
   return (
     <GestureHandlerRootView style={styles.root}>
       <Animated.ScrollView
+        onScroll={handleScroll}
         onLayout={e => {
           e.target.measure((x, y, width, height, pageX, pageY) => {
             setScrollViewMeasureState({x, y, width, height, pageX, pageY});

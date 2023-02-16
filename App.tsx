@@ -35,7 +35,11 @@ const App = () => {
             onClosed={() => {
               setVisible(false);
             }}>
-            {/* <Text>This is a BottomSheet</Text> */}
+            <Text>This is a BottomSheet</Text>
+            <Text>This is a BottomSheet</Text>
+            <Text>This is a BottomSheet</Text>
+            <Text>This is a BottomSheet</Text>
+            <Text>This is a BottomSheet</Text>
           </BottomSheet>
         )}
         <DraggableListView
