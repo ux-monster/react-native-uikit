@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, {useState} from 'react';
-import {StatusBar, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {
   GestureHandlerRootView,
   PanGestureHandler,

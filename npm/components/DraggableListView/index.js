@@ -65,8 +65,7 @@ var DraggableItem = function (_a) {
                 var _scrollOffset = ITEM_HEIGHT;
                 var scrollDownPoint = scrollVeiwMeasureState.height +
                     scrollVeiwMeasureState.pageY -
-                    _scrollOffset -
-                    (react_native_1.StatusBar.currentHeight || 0);
+                    2.5 * _scrollOffset;
                 if (_dy_fromContainer > scrollDownPoint) {
                     scrolling.value = true;
                     for (var i = 0; i < totalCount; i++) {
@@ -74,7 +73,7 @@ var DraggableItem = function (_a) {
                     }
                     scrolling.value = false;
                 }
-                var scrollUpPoint = ITEM_HEIGHT;
+                var scrollUpPoint = _scrollOffset;
                 if (_dy_fromContainer < scrollUpPoint) {
                     scrolling.value = true;
                     for (var i = 0; i < totalCount; i++) {
@@ -142,8 +141,11 @@ var DraggableListView = function (_a) {
         }
         return object;
     }
+    var handleScroll = (0, react_native_reanimated_1.useAnimatedScrollHandler)(function (event) {
+        scrollY.value = event.contentOffset.y;
+    });
     return (<react_native_gesture_handler_1.GestureHandlerRootView style={styles.root}>
-      <react_native_reanimated_1.default.ScrollView onLayout={function (e) {
+      <react_native_reanimated_1.default.ScrollView onScroll={handleScroll} onLayout={function (e) {
             e.target.measure(function (x, y, width, height, pageX, pageY) {
                 setScrollViewMeasureState({ x: x, y: y, width: width, height: height, pageX: pageX, pageY: pageY });
             });

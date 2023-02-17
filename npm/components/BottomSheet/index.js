@@ -25,14 +25,14 @@ var BottomSheet = function (_a) {
       </react_native_gesture_handler_1.GestureHandlerRootView>
     </react_native_1.Modal>);
 };
-var showBottomSheet = function (onClosed) {
+var show = function (onClosed) {
     var component = new react_native_root_siblings_1.default((<BottomSheet onClosed={function () {
             component.destroy();
             onClosed();
         }}/>));
 };
 exports.default = Object.assign(BottomSheet, {
-    showBottomSheet: showBottomSheet,
+    show: show,
 });
 var styles = react_native_2.StyleSheet.create({
     container: {
@@ -61,7 +61,6 @@ var styles = react_native_2.StyleSheet.create({
     bottomContainer: {
         backgroundColor: '#ffffff',
         marginTop: 'auto',
-        height: 500,
         borderRadius: 32,
         borderBottomRightRadius: 0,
         borderBottomLeftRadius: 0,

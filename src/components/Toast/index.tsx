@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Text,
   useWindowDimensions,
-  View,
 } from 'react-native';
 import RootSiblings from 'react-native-root-siblings';
 

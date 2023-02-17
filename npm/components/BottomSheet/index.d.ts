@@ -4,6 +4,6 @@ interface Props {
     onClosed: () => void;
 }
 declare const _default: (({ children, onClosed }: Props) => JSX.Element) & {
-    showBottomSheet: (onClosed: () => void) => void;
+    show: (onClosed: () => void) => void;
 };
 export default _default;
