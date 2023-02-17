@@ -1,6 +1,7 @@
 // Develop File
 import {BottomSheet} from './src';
 import {DraggableListView} from './src';
+import {Toast} from './src';
 
 // Build File
 // import {BottomSheet} from './npm';
@@ -9,7 +10,7 @@ import {DraggableListView} from './src';
 // import {BottomSheet} from '@ux-monster/react-native-uikit';
 
 import React, {useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {RootSiblingParent} from 'react-native-root-siblings';
 
 const App = () => {
@@ -21,13 +22,7 @@ const App = () => {
           onPress={() => {
             setVisible(true);
           }}
-          style={{
-            marginTop: 40,
-            padding: 20,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: '#dfdfdf',
-          }}>
+          style={styles.button}>
           <Text>Open BottomSheet</Text>
         </TouchableOpacity>
         {visible && (
@@ -61,9 +56,27 @@ const App = () => {
             {id: '15'},
           ]}
         />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            Toast.show('Hello~!', 3000, 'top');
+            Toast.show('Hello~!', 3000, 'middle');
+            Toast.show('Hello~!', 3000, 'bottom');
+          }}>
+          <Text>Open Toast</Text>
+        </TouchableOpacity>
       </View>
     </RootSiblingParent>
   );
 };
 
 export default App;
+
+const styles = StyleSheet.create({
+  button: {
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#dfdfdf',
+  },
+});

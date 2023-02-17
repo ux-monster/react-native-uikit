@@ -38,7 +38,7 @@ const BottomSheet = ({children, onClosed}: Props) => {
   );
 };
 
-const showBottomSheet = (onClosed: () => void) => {
+const show = (onClosed: () => void) => {
   const component = new RootSiblings(
     (
       <BottomSheet
@@ -52,7 +52,7 @@ const showBottomSheet = (onClosed: () => void) => {
 };
 
 export default Object.assign(BottomSheet, {
-  showBottomSheet,
+  show,
 });
 
 const styles = StyleSheet.create({
