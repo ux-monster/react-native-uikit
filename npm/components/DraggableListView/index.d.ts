@@ -1,6 +1,7 @@
 /// <reference types="react" />
 interface DraggableListViewProps {
+    type?: 'longpress' | 'normal';
     items: Array<any>;
 }
-declare const DraggableListView: ({ items }: DraggableListViewProps) => JSX.Element;
+declare const DraggableListView: ({ type, items, }: DraggableListViewProps) => JSX.Element;
 export default DraggableListView;

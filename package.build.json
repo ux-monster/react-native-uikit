@@ -1,6 +1,6 @@
 {
   "name": "@ux-monster/react-native-uikit",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "index.js",
   "types": "index.d.ts",
   "peerDependencies": {
@@ -8,14 +8,37 @@
     "react-native": "0.70.x",
     "react-native-reanimated": "2.10.x",
     "react-native-gesture-handler": "*",
-    "react-native-device-info": "*"
+    "react-native-device-info": "*",
+    "react-native-root-siblings": "4.x"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ux-monster/react-native-uikit.git"
   },
-  "keywords": ["react-native", "react-native-uikit"],
-  "author": "popocreator",
+  "keywords": [
+    "react-native",
+    "react-component",
+    "react-native-component",
+    "react",
+    "mobile",
+    "ios",
+    "android",
+    "osx",
+    "windows",
+    "macos",
+    "ui",
+    "icon",
+    "icons",
+    "vector",
+    "retina",
+    "font",
+    "uikit",
+    "react-native-uikit"
+  ],
+  "author": {
+    "name": "popocreator",
+    "email": "popomonclub@gmail.com"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/ux-monster/react-native-uikit/issues"

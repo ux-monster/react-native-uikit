@@ -59,40 +59,29 @@ import {BottomSheet} from './npm';
 import {BottomSheet} from '@ux-monster/react-native-uikit';
 ```
 
-### 4) Sample code - BottomSheet
+### 4) Sample code
 
 ```tsx
-import {BottomSheet} from '@ux-monster/react-native-uikit';
 import React, {useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {RootSiblingParent} from 'react-native-root-siblings';
+import {
+  BottomSheet,
+  DraggableListView,
+  Toast,
+} from '@ux-monster/react-native-uikit';
 
 const App = () => {
-  const [visible, setVisible] = useState(false);
   return (
-    <View style={{flex: 1}}>
-      <TouchableOpacity
-        onPress={() => {
-          setVisible(true);
-        }}
-        style={{
-          marginTop: 40,
-          padding: 20,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#dfdfdf',
-        }}>
-        <Text>Open BottomSheet</Text>
-      </TouchableOpacity>
-      {visible && (
-        <BottomSheet
-          onClosed={() => {
-            setVisible(false);
-          }}
-        />
-      )}
-    </View>
+    <RootSiblingParent>
+      <View style={{flex: 1, paddingTop: 40}}>
+        <BottomSheetExample />
+        <ToastExample />
+        <DraggableListExample type="normal" />
+        <DraggableListExample type="longpress" />
+        <>... to be continue </>
+      </View>
+    </RootSiblingParent>
   );
 };
-
-export default App;
 ```
