@@ -83,8 +83,9 @@ const App = () => {
       <View style={{flex: 1, paddingTop: 40}}>
         <BottomSheetExample />
         <ToastExample />
-        <DraggableListExample type="normal" />
         <DraggableListExample type="longpress" />
+        <DraggableListExample type="normal" />
+        <BottomSheetExample />
       </View>
     </RootSiblingParent>
   );

@@ -149,10 +149,7 @@ const DraggableItem = ({
       if (isNotScrolling) {
         // Scroll Down
         const _scrollOffset = ITEM_HEIGHT;
-        const scrollDownPoint =
-          scrollViewMeasureState.height +
-          scrollViewMeasureState.pageY -
-          2.5 * _scrollOffset;
+        const scrollDownPoint = scrollViewMeasureState.height - _scrollOffset;
         if (_dy_fromContainer > scrollDownPoint) {
           scrolling.value = true;
           for (let i = 0; i < totalCount; i++) {
@@ -209,10 +206,7 @@ const DraggableItem = ({
       if (isNotScrolling) {
         // Scroll Down
         const _scrollOffset = ITEM_HEIGHT;
-        const scrollDownPoint =
-          scrollViewMeasureState.height +
-          scrollViewMeasureState.pageY -
-          2.5 * _scrollOffset;
+        const scrollDownPoint = scrollViewMeasureState.height - _scrollOffset;
         if (_dy_fromContainer > scrollDownPoint) {
           scrolling.value = true;
           for (let i = 0; i < totalCount; i++) {
