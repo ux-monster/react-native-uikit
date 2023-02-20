@@ -1,10 +1,23 @@
 import React from 'react';
-import {View} from 'react-native';
+import {Text, TextInput, View} from 'react-native';
+import Animated from 'react-native-reanimated';
 
-interface Props {}
+interface Props {
+  children?: React.ReactNode;
+}
 
-const KeyboardAttachedView = ({}: Props) => {
-  return <View>KeyboardAttachedView</View>;
+const KeyboardAttachedView = ({children}: Props) => {
+  return (
+    <View>
+      <Animated.ScrollView>
+        <TextInput value="Enter input" />
+        {children}
+      </Animated.ScrollView>
+      <View>
+        <Text>BottomView</Text>
+      </View>
+    </View>
+  );
 };
 
 export default KeyboardAttachedView;
