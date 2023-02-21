@@ -10,8 +10,9 @@ import {Toast} from './src';
 // import {BottomSheet} from '@ux-monster/react-native-uikit';
 
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Keyboard, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {RootSiblingParent} from 'react-native-root-siblings';
+import KeyboardAttachedView from '@/components/KeyboardAttachedView';
 
 const BottomSheetExample = () => {
   const [visible, setVisible] = useState(false);
@@ -76,16 +77,19 @@ const ToastExample = () => {
     </TouchableOpacity>
   );
 };
+const KeyboardAttachedViewExample = () => {
+  return <KeyboardAttachedView />;
+};
 
 const App = () => {
   return (
     <RootSiblingParent>
       <View style={{flex: 1, paddingTop: 40}}>
-        <BottomSheetExample />
-        <ToastExample />
-        <DraggableListExample type="longpress" />
-        <DraggableListExample type="normal" />
-        <BottomSheetExample />
+        {/* <BottomSheetExample /> */}
+        {/* <DraggableListExample type="longpress" /> */}
+        {/* <DraggableListExample type="normal" /> */}
+        {/* <ToastExample /> */}
+        <KeyboardAttachedViewExample />
       </View>
     </RootSiblingParent>
   );
