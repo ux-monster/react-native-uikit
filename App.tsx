@@ -84,7 +84,7 @@ const KeyboardAttachedViewExample = () => {
 const App = () => {
   return (
     <RootSiblingParent>
-      <View style={{flex: 1, paddingTop: 40}}>
+      <View style={{flex: 1}}>
         {/* <BottomSheetExample /> */}
         {/* <DraggableListExample type="longpress" /> */}
         {/* <DraggableListExample type="normal" /> */}
