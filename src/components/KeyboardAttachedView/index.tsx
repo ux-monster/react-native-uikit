@@ -67,14 +67,15 @@ const KeyboardAttachedView = ({children}: Props) => {
     }
   }, [handleShowKeyboard, handleHideKeyboard]);
 
+  const showingAddOn = useRef<boolean>(false);
   const textInputRef = useRef<TextInput>(null);
-  useEffect(() => {
-    if (visibleAddOn) {
-      setTimeout(() => {
-        textInputRef.current?.focus();
-      }, 500);
-    }
-  }, [visibleAddOn]);
+  // useEffect(() => {
+  //   if (visibleAddOn) {
+  //     setTimeout(() => {
+  //       textInputRef.current?.focus();
+  //     }, 500);
+  //   }
+  // }, [visibleAddOn]);
 
   return (
     <View style={styles.container}>
@@ -84,6 +85,11 @@ const KeyboardAttachedView = ({children}: Props) => {
           blurOnSubmit={false}
           value="Enter input"
           showSoftInputOnFocus={!visibleAddOn}
+          onBlur={() => {
+            if (!showingAddOn.current) {
+              setVisibleAddOn(false);
+            }
+          }}
         />
         {children}
       </Animated.ScrollView>
@@ -93,6 +99,11 @@ const KeyboardAttachedView = ({children}: Props) => {
           onPress={() => {
             Keyboard.dismiss();
             setVisibleAddOn(true);
+            showingAddOn.current = true;
+            setTimeout(() => {
+              textInputRef.current?.focus();
+              showingAddOn.current = false;
+            }, 500);
           }}>
           <Text>ADD ON - Tab</Text>
         </TouchableOpacity>
