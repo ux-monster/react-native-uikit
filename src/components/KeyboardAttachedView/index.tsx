@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   Keyboard,
@@ -37,12 +37,6 @@ const KeyboardAttachedView = ({children}: Props) => {
     setVisibleKeyboard(false);
   }, []);
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      bottom: !visibleKeyboard && visibleAddOn ? keyboardHeight.value : 0,
-    };
-  }, [visibleAddOn, visibleKeyboard, keyboardHeight]);
-
   useEffect(() => {
     if (Platform.OS === 'ios') {
       const keyboardWillShow = Keyboard.addListener(
@@ -73,36 +67,41 @@ const KeyboardAttachedView = ({children}: Props) => {
     }
   }, [handleShowKeyboard, handleHideKeyboard]);
 
+  const textInputRef = useRef<TextInput>(null);
+  useEffect(() => {
+    if (visibleAddOn) {
+      setTimeout(() => {
+        textInputRef.current?.focus();
+      }, 500);
+    }
+  }, [visibleAddOn]);
+
   return (
     <View style={styles.container}>
       <Animated.ScrollView>
         <TextInput
+          ref={textInputRef}
           blurOnSubmit={false}
           value="Enter input"
-          onBlur={() => {
-            return false;
-          }}
+          showSoftInputOnFocus={!visibleAddOn}
         />
         {children}
       </Animated.ScrollView>
-      <Animated.View
-        style={[
-          {
-            position: 'absolute',
-            left: 0,
-          },
-          animatedStyle,
-        ]}>
+      <View>
         <Text>BottomView</Text>
         <TouchableOpacity
           onPress={() => {
-            setVisibleAddOn(true);
-            setVisibleKeyboard(false);
             Keyboard.dismiss();
+            setVisibleAddOn(true);
           }}>
           <Text>ADD ON - Tab</Text>
         </TouchableOpacity>
-      </Animated.View>
+        {!visibleKeyboard && visibleAddOn && (
+          <Animated.View style={{height: keyboardHeight.value}}>
+            <Text>ADD ON - View</Text>
+          </Animated.View>
+        )}
+      </View>
     </View>
   );
 };
