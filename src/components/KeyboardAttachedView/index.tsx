@@ -14,13 +14,13 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
+import ScrollableTabView from '../ScrollableTabView';
 
 interface Props {
   children?: React.ReactNode;
 }
 
 const KeyboardAttachedView = ({children}: Props) => {
-  const [visibleAddOn, setVisibleAddOn] = useState<boolean>(false);
   const [visibleKeyboard, setVisibleKeyboard] = useState<boolean>(false);
   const keyboardHeight = useSharedValue<number>(0);
 
@@ -67,15 +67,9 @@ const KeyboardAttachedView = ({children}: Props) => {
     }
   }, [handleShowKeyboard, handleHideKeyboard]);
 
+  const [visibleAddOn, setVisibleAddOn] = useState<boolean>(false);
   const showingAddOn = useRef<boolean>(false);
   const textInputRef = useRef<TextInput>(null);
-  // useEffect(() => {
-  //   if (visibleAddOn) {
-  //     setTimeout(() => {
-  //       textInputRef.current?.focus();
-  //     }, 500);
-  //   }
-  // }, [visibleAddOn]);
 
   const handleBlur = () => {
     if (!showingAddOn.current) {
@@ -98,7 +92,6 @@ const KeyboardAttachedView = ({children}: Props) => {
       <Animated.ScrollView>
         <TextInput
           ref={textInputRef}
-          blurOnSubmit={false}
           value="Enter input"
           showSoftInputOnFocus={!visibleAddOn}
           onBlur={handleBlur}
@@ -106,10 +99,11 @@ const KeyboardAttachedView = ({children}: Props) => {
         {children}
       </Animated.ScrollView>
       <View>
-        <Text>BottomView</Text>
-        <TouchableOpacity onPress={handleActivateAddOn}>
-          <Text>ADD ON - Tab</Text>
-        </TouchableOpacity>
+        {(visibleKeyboard || visibleAddOn) && (
+          <TouchableOpacity onPress={handleActivateAddOn}>
+            <Text>ADD ON - Tab</Text>
+          </TouchableOpacity>
+        )}
         {!visibleKeyboard && visibleAddOn && (
           <Animated.View style={{height: keyboardHeight.value}}>
             <Text>ADD ON - View</Text>
