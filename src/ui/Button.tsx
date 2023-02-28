@@ -1,8 +1,8 @@
 import Text from '@/ui/Text';
 import React from 'react';
-import RN, {TouchableHighlightProps} from 'react-native';
+import RN from 'react-native';
 
-type Props = TouchableHighlightProps & {};
+interface Props extends RN.TouchableHighlightProps {}
 
 const Button = (props: Props) => {
   return (

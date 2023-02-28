@@ -1,9 +1,9 @@
 import React from 'react';
-import * as RN from 'react-native';
+import RN from 'react-native';
 
-type Props = {
+interface Props extends RN.TextProps {
   children?: React.ReactNode | undefined;
-};
+}
 
 const Text = ({children}: Props) => {
   return <RN.Text>{children}</RN.Text>;
