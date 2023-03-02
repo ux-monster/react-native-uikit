@@ -57,6 +57,9 @@
       "json",
       "node"
     ],
+    "testMatch": [
+      "**/scenarios/*.test.tsx"
+    ],
     "modulePathIgnorePatterns": [
       "./design-system",
       "./mobile-ux"
