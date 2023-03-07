@@ -5,14 +5,17 @@ interface TimerHookProps {}
 export interface TimerHookReturnProps {
   timeInSeconds: number;
   timerState: TimerState;
-  start: () => void;
+  start: (startTimeInSeconds?: number) => void;
+  restart: (startTimeInSeconds?: number) => void;
   pause: () => void;
+  resume: () => void;
   stop: () => void;
 }
 
 export enum TimerState {
   STOPPED = 'STOPPED',
   RUNNING = 'RUNNING',
+  PAUSED = 'PAUSED',
 }
 
 const useTimer = ({}: TimerHookProps): TimerHookReturnProps => {
@@ -20,19 +23,40 @@ const useTimer = ({}: TimerHookProps): TimerHookReturnProps => {
   const [timerState, setTimerState] = useState<TimerState>(TimerState.STOPPED);
   const timerInterval = useRef<NodeJS.Timer>();
 
-  const _startTimer = () => {
+  const _startTimer = (startTimeInSeconds?: number) => {
     if (timerState === TimerState.STOPPED) {
       setTimerState(TimerState.RUNNING);
+      startTimeInSeconds && setTimeInSeconds(() => startTimeInSeconds);
       timerInterval.current = setInterval(() => {
-        setTimeInSeconds(prev => prev + 1);
+        setTimeInSeconds(prev => prev - 1);
+      }, 1000);
+    }
+  };
+
+  const _restartTimer = (startTimeInSeconds?: number) => {
+    if (timerState === TimerState.RUNNING) {
+      clearInterval(timerInterval.current);
+      startTimeInSeconds && setTimeInSeconds(() => startTimeInSeconds);
+      timerInterval.current = setInterval(() => {
+        setTimeInSeconds(prev => prev - 1);
       }, 1000);
     }
   };
 
   const _pauseTimer = () => {
     if (timerState === TimerState.RUNNING) {
-      setTimerState(TimerState.STOPPED);
+      setTimerState(TimerState.PAUSED);
       clearInterval(timerInterval.current);
+    }
+  };
+
+  const _resumeTimer = () => {
+    if (timerState === TimerState.PAUSED) {
+      setTimerState(TimerState.RUNNING);
+      clearInterval(timerInterval.current);
+      timerInterval.current = setInterval(() => {
+        setTimeInSeconds(prev => prev - 1);
+      }, 1000);
     }
   };
 
@@ -44,12 +68,20 @@ const useTimer = ({}: TimerHookProps): TimerHookReturnProps => {
     }
   };
 
-  const start = () => {
-    _startTimer();
+  const start = (startTimeInSeconds?: number) => {
+    _startTimer(startTimeInSeconds);
+  };
+
+  const restart = (startTimeInSeconds?: number) => {
+    _restartTimer(startTimeInSeconds);
   };
 
   const pause = () => {
     _pauseTimer();
+  };
+
+  const resume = () => {
+    _resumeTimer();
   };
 
   const stop = () => {
@@ -60,7 +92,9 @@ const useTimer = ({}: TimerHookProps): TimerHookReturnProps => {
     timeInSeconds,
     timerState,
     start,
+    restart,
     pause,
+    resume,
     stop,
   };
 };
