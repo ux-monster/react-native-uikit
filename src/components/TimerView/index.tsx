@@ -1,4 +1,4 @@
-import useTimer from '@/hooks/useTimer';
+import useTimer, {TimerState} from '@/hooks/useTimer';
 import React, {useEffect} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
@@ -19,29 +19,29 @@ const timerItems: TimerItem[] = [
 interface Props {}
 
 const TimerView = ({}: Props) => {
-  const {timeInSeconds, start, stop, pause, restart} = useTimer({});
+  const {timeInSeconds, timerState, start, stop, pause} = useTimer({});
 
-  useEffect(() => {
+  const handleStart = () => {
     start();
-  }, [start]);
+  };
 
   const handlePause = () => {
     pause();
   };
 
-  const handleRestart = () => {
-    restart();
-  };
-
   return (
     <View>
       <Text>{timeInSeconds}</Text>
-      <TouchableOpacity onPress={handlePause}>
-        <Text>pause</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleRestart}>
-        <Text>restart</Text>
-      </TouchableOpacity>
+      {timerState === TimerState.STOPPED && (
+        <TouchableOpacity onPress={handleStart}>
+          <Text>start</Text>
+        </TouchableOpacity>
+      )}
+      {timerState === TimerState.RUNNING && (
+        <TouchableOpacity onPress={handlePause}>
+          <Text>pause</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

@@ -1,5 +1,5 @@
 // Develop File
-import {BottomSheet} from './src';
+import {BottomSheet, TimerView} from './src';
 import {DraggableListView} from './src';
 import {Toast} from './src';
 
@@ -89,7 +89,8 @@ const App = () => {
         {/* <DraggableListExample type="longpress" /> */}
         {/* <DraggableListExample type="normal" /> */}
         {/* <ToastExample /> */}
-        <KeyboardAttachedViewExample />
+        {/* <KeyboardAttachedViewExample /> */}
+        <TimerView />
       </View>
     </RootSiblingParent>
   );
