@@ -23,7 +23,7 @@ const useTimer = ({}: TimerHookProps): TimerHookReturnProps => {
   const [timerState, setTimerState] = useState<TimerState>(TimerState.STOPPED);
   const timerInterval = useRef<NodeJS.Timer>();
 
-  const _startTimer = (startTimeInSeconds?: number) => {
+  const start = (startTimeInSeconds?: number) => {
     if (timerState === TimerState.STOPPED) {
       setTimerState(TimerState.RUNNING);
       startTimeInSeconds && setTimeInSeconds(() => startTimeInSeconds);
@@ -33,7 +33,7 @@ const useTimer = ({}: TimerHookProps): TimerHookReturnProps => {
     }
   };
 
-  const _restartTimer = (startTimeInSeconds?: number) => {
+  const restart = (startTimeInSeconds?: number) => {
     if (timerState === TimerState.RUNNING) {
       clearInterval(timerInterval.current);
       startTimeInSeconds && setTimeInSeconds(() => startTimeInSeconds);
@@ -43,14 +43,14 @@ const useTimer = ({}: TimerHookProps): TimerHookReturnProps => {
     }
   };
 
-  const _pauseTimer = () => {
+  const pause = () => {
     if (timerState === TimerState.RUNNING) {
       setTimerState(TimerState.PAUSED);
       clearInterval(timerInterval.current);
     }
   };
 
-  const _resumeTimer = () => {
+  const resume = () => {
     if (timerState === TimerState.PAUSED) {
       setTimerState(TimerState.RUNNING);
       clearInterval(timerInterval.current);
@@ -60,32 +60,12 @@ const useTimer = ({}: TimerHookProps): TimerHookReturnProps => {
     }
   };
 
-  const _stopTimer = () => {
+  const stop = () => {
     if (timerState === TimerState.RUNNING) {
       setTimerState(TimerState.STOPPED);
       clearInterval(timerInterval.current);
       setTimeInSeconds(0);
     }
-  };
-
-  const start = (startTimeInSeconds?: number) => {
-    _startTimer(startTimeInSeconds);
-  };
-
-  const restart = (startTimeInSeconds?: number) => {
-    _restartTimer(startTimeInSeconds);
-  };
-
-  const pause = () => {
-    _pauseTimer();
-  };
-
-  const resume = () => {
-    _resumeTimer();
-  };
-
-  const stop = () => {
-    _stopTimer();
   };
 
   return {
