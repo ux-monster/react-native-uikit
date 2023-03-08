@@ -26,7 +26,8 @@ const TimerView = ({}: Props) => {
     useTimer({});
 
   const handleStart = () => {
-    start(timerItems[currentIndex].duration);
+    const startTimeInSeconds = timerItems[currentIndex].duration;
+    start(startTimeInSeconds);
   };
 
   const handlePause = () => {
@@ -41,7 +42,8 @@ const TimerView = ({}: Props) => {
     const limit = timerItems.length;
     const nextIndex = currentIndex + 1;
     if (nextIndex < limit) {
-      restart(timerItems[nextIndex].duration);
+      const startTimeInSeconds = timerItems[nextIndex].duration;
+      restart(startTimeInSeconds);
       setCurrentIndex(nextIndex);
     } else {
       stop();
