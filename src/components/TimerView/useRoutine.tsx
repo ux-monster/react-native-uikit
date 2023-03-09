@@ -23,18 +23,22 @@ const useRoutine = (
   );
 
   const start = () => {
+    console.log('start', currentRoutineTodo);
     timer.start(currentRoutineTodo.duration);
   };
 
   const pause = () => {
+    console.log('pause', currentRoutineTodo);
     timer.pause();
   };
 
   const resume = () => {
+    console.log('resume', currentRoutineTodo);
     timer.resume();
   };
 
   const next = () => {
+    console.log('next');
     const currentRoutineTodoIndex = routineTodoList.indexOf(currentRoutineTodo);
     const nextRoutineTodo: RoutineTodo =
       routineTodoList[currentRoutineTodoIndex + 1];
@@ -43,6 +47,7 @@ const useRoutine = (
   };
 
   const stop = () => {
+    console.log('stop');
     timer.stop();
   };
 
