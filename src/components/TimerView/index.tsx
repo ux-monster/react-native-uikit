@@ -1,8 +1,8 @@
-import useTimer, {TimerState} from '@/hooks/useTimer';
 import _ from 'lodash';
 import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
+import useTimer, {TimerState} from './useTimer';
 
 interface TimerItem {
   id: string;

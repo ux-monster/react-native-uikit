@@ -6,7 +6,7 @@ import useTimer, {TimerState} from './useTimer';
 
 const Example = () => {
   const timer = useTimer();
-  const routine = useRoutine(timer, []);
+  const routine = useRoutine(timer);
 
   const toTimeString = (_timeInSeconds: number) => {
     const absTimeInSeconds = Math.abs(_timeInSeconds);
@@ -22,7 +22,8 @@ const Example = () => {
 
   return (
     <View>
-      <Text>{routine.currentRoutineTodo.title}</Text>
+      <Text>Hello</Text>
+      <Text>{routine.currentRoutineTodo?.title}</Text>
       <Text>{toTimeString(timer.timeInSeconds)}</Text>
       {timer.timerState === TimerState.STOPPED && (
         <TouchableOpacity onPress={routine.start}>

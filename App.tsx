@@ -13,6 +13,7 @@ import React, {useState} from 'react';
 import {Keyboard, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {RootSiblingParent} from 'react-native-root-siblings';
 import KeyboardAttachedView from '@/components/KeyboardAttachedView';
+import Example from '@/components/TimerView/Example';
 
 const BottomSheetExample = () => {
   const [visible, setVisible] = useState(false);
@@ -90,7 +91,8 @@ const App = () => {
         {/* <DraggableListExample type="normal" /> */}
         {/* <ToastExample /> */}
         {/* <KeyboardAttachedViewExample /> */}
-        <TimerView />
+        {/* <TimerView /> */}
+        <Example />
       </View>
     </RootSiblingParent>
   );
