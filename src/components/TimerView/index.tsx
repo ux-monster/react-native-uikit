@@ -23,7 +23,7 @@ interface Props {}
 const TimerView = ({}: Props) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const {timeInSeconds, timerState, start, restart, pause, resume, stop} =
-    useTimer({});
+    useTimer();
 
   const handleStart = () => {
     const startTimeInSeconds = timerItems[currentIndex].duration;
