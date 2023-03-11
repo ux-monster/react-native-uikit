@@ -1,6 +1,6 @@
 import {useRef, useState} from 'react';
 
-export interface TimerHookReturnProps {
+export interface Timer {
   timeInSeconds: number;
   timerState: TimerState;
   start: (startTimeInSeconds?: number) => void;
@@ -16,7 +16,7 @@ export enum TimerState {
   PAUSED = 'PAUSED',
 }
 
-const useTimer = (): TimerHookReturnProps => {
+const useTimer = (): Timer => {
   const [timeInSeconds, setTimeInSeconds] = useState<number>(0);
   const [timerState, setTimerState] = useState<TimerState>(TimerState.STOPPED);
   const timerInterval = useRef<NodeJS.Timer>();

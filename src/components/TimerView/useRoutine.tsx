@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {TimerHookReturnProps} from './useTimer';
+import {Timer} from './useTimer';
 
 interface RoutineTodo {
   id: string;
@@ -8,7 +8,7 @@ interface RoutineTodo {
 }
 
 const useRoutine = (
-  timer: TimerHookReturnProps,
+  timer: Timer,
   routineTodoList: RoutineTodo[] | undefined = [
     {id: '1', title: '푸시업 - 5회', duration: 1 * 60},
     {id: '2', title: '싯업 - 10회', duration: 2 * 60},
