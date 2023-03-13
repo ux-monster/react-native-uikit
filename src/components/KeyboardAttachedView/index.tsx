@@ -13,6 +13,7 @@ import {
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
+  withTiming,
 } from 'react-native-reanimated';
 import ScrollableTabView from '../ScrollableTabView';
 import useInteraction from './useInteraction';
@@ -24,11 +25,14 @@ interface Props {
 const KeyboardAttachedView = ({children}: Props) => {
   const {
     textInputRef,
+    selectedIndex,
     visibleAddOn,
     visibleKeyboard,
     handleBlur,
     handleActivateAddOn,
     addOnViewStyle,
+    bottomContainerHeight,
+    bottomContainerTransitionHeight,
   } = useInteraction();
 
   return (
@@ -42,18 +46,28 @@ const KeyboardAttachedView = ({children}: Props) => {
         />
         {children}
       </Animated.ScrollView>
-      <View>
+      <Animated.View>
         {(visibleKeyboard || visibleAddOn) && (
-          <TouchableOpacity onPress={handleActivateAddOn}>
-            <Text>ADD ON - Tab</Text>
-          </TouchableOpacity>
+          <View>
+            {[1, 2, 3].map((n, i) => (
+              <TouchableOpacity key={i} onPress={() => handleActivateAddOn(i)}>
+                <Text>ADD ON - Tab - {i}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         )}
         {!visibleKeyboard && visibleAddOn && (
           <Animated.View style={addOnViewStyle}>
-            <Text>ADD ON - View</Text>
+            {[1, 2, 3].map((n, i) =>
+              selectedIndex === i ? (
+                <View key={i}>
+                  <Text>ADD ON - View - {i}</Text>
+                </View>
+              ) : null,
+            )}
           </Animated.View>
         )}
-      </View>
+      </Animated.View>
     </View>
   );
 };

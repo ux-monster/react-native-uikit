@@ -90,9 +90,9 @@ const App = () => {
         {/* <DraggableListExample type="longpress" /> */}
         {/* <DraggableListExample type="normal" /> */}
         {/* <ToastExample /> */}
-        {/* <KeyboardAttachedViewExample /> */}
+        <KeyboardAttachedViewExample />
         {/* <TimerView /> */}
-        <Example />
+        {/* <Example /> */}
       </View>
     </RootSiblingParent>
   );

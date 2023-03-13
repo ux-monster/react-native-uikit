@@ -5,6 +5,9 @@ import {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 const useInteraction = () => {
   const [visibleKeyboard, setVisibleKeyboard] = useState<boolean>(false);
   const keyboardHeight = useSharedValue<number>(0);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const bottomContainerHeight = useRef<number>(0);
+  const bottomContainerTransitionHeight = useSharedValue<number>(0);
 
   const handleShowKeyboard = useCallback(
     (e: KeyboardEvent) => {
@@ -59,9 +62,10 @@ const useInteraction = () => {
     }
   };
 
-  const handleActivateAddOn = () => {
+  const handleActivateAddOn = (tabIndex: number) => {
     Keyboard.dismiss();
     setVisibleAddOn(true);
+    setSelectedIndex(tabIndex);
     showingAddOn.current = true;
     setTimeout(() => {
       textInputRef.current?.focus();
@@ -77,6 +81,9 @@ const useInteraction = () => {
 
   return {
     textInputRef,
+    selectedIndex,
+    bottomContainerHeight,
+    bottomContainerTransitionHeight,
     visibleAddOn,
     visibleKeyboard,
     handleBlur,
