@@ -32,7 +32,7 @@ const KeyboardAttachedView = ({children}: Props) => {
     handleActivateAddOn,
     addOnViewStyle,
     bottomContainerHeight,
-    bottomContainerTransitionHeight,
+    bottomContainerViewStyle,
   } = useInteraction();
 
   return (
@@ -46,7 +46,23 @@ const KeyboardAttachedView = ({children}: Props) => {
         />
         {children}
       </Animated.ScrollView>
-      <Animated.View>
+      <Animated.View
+        style={[
+          {backgroundColor: '#fff'},
+          visibleAddOn && bottomContainerViewStyle,
+          !visibleAddOn && {height: 'auto'},
+        ]}
+        onLayout={e => {
+          console.log(
+            'onLayout',
+            visibleKeyboard,
+            visibleAddOn,
+            bottomContainerHeight.value,
+          );
+          if (visibleAddOn && bottomContainerHeight.value === 0) {
+            bottomContainerHeight.value = e.nativeEvent.layout.height;
+          }
+        }}>
         {(visibleKeyboard || visibleAddOn) && (
           <View>
             {[1, 2, 3].map((n, i) => (
