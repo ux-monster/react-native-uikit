@@ -10,7 +10,7 @@ import {
 const useInteraction = () => {
   const [visibleKeyboard, setVisibleKeyboard] = useState<boolean>(false);
   const keyboardHeight = useSharedValue<number>(0);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const bottomContainerHeight = useSharedValue<number>(0);
   const bottomContainerViewStyle = useAnimatedStyle(() => {
     return {
@@ -67,25 +67,39 @@ const useInteraction = () => {
 
   const invisibleAddOn = () => {
     setVisibleAddOn(false);
+    setSelectedIndex(-1);
   };
 
   const handleBlur = () => {
     if (!showingAddOn.current) {
-      bottomContainerHeight.value = withTiming(0, {}, () => {
-        runOnJS(invisibleAddOn)();
-      });
+      invisibleAddOn();
+
+      // Animation :: slide down - blur
+      // bottomContainerHeight.value = withTiming(0, {}, () => {
+      //   runOnJS(invisibleAddOn)();
+      // });
     }
   };
 
   const handleActivateAddOn = (tabIndex: number) => {
-    Keyboard.dismiss();
-    setVisibleAddOn(true);
-    setSelectedIndex(tabIndex);
-    showingAddOn.current = true;
-    setTimeout(() => {
+    if (tabIndex === selectedIndex) {
+      Keyboard.dismiss();
       textInputRef.current?.focus();
-      showingAddOn.current = false;
-    }, 500);
+      setSelectedIndex(-1);
+      setTimeout(() => {
+        textInputRef.current?.focus();
+        // setVisibleAddOn(false);
+      }, 500);
+    } else {
+      Keyboard.dismiss();
+      setVisibleAddOn(true);
+      setSelectedIndex(tabIndex);
+      showingAddOn.current = true;
+      setTimeout(() => {
+        textInputRef.current?.focus();
+        showingAddOn.current = false;
+      }, 500);
+    }
   };
 
   const addOnViewStyle = useAnimatedStyle(() => {

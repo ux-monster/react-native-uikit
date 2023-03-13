@@ -2,12 +2,16 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   Keyboard,
+  KeyboardAvoidingView,
   KeyboardEvent,
   Platform,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import Animated, {
@@ -35,17 +39,54 @@ const KeyboardAttachedView = ({children}: Props) => {
     bottomContainerViewStyle,
   } = useInteraction();
 
+  const {height, width} = useWindowDimensions();
+
+  const [] = useState(false);
+
   return (
-    <View style={styles.container}>
-      <Animated.ScrollView>
+    <View style={[styles.container]}>
+      <TouchableWithoutFeedback onPress={handleBlur}>
+        <Animated.ScrollView>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n, i) => (
+            <View
+              key={i}
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: 8,
+                padding: 20,
+                marginVertical: 10,
+                marginHorizontal: 10,
+              }}>
+              <Text style={{fontSize: 14}}>Hello!</Text>
+            </View>
+          ))}
+        </Animated.ScrollView>
+      </TouchableWithoutFeedback>
+      <TouchableOpacity
+        onPress={() => {
+          console.log('pressed');
+        }}
+        style={{
+          borderTopWidth: 1,
+          borderBottomWidth: 1,
+          borderColor: '#eee',
+        }}>
         <TextInput
+          style={{
+            backgroundColor: '#fff',
+          }}
           ref={textInputRef}
-          value="Enter input"
+          placeholder="Enter input"
           showSoftInputOnFocus={!visibleAddOn}
-          onBlur={handleBlur}
+          onPressIn={() => {
+            handleBlur();
+            textInputRef.current?.focus();
+          }}
+          onBlur={() => {
+            // textInputRef.current?.focus();
+          }}
         />
-        {children}
-      </Animated.ScrollView>
+      </TouchableOpacity>
       <Animated.View
         style={[
           {backgroundColor: '#fff'},
@@ -64,16 +105,31 @@ const KeyboardAttachedView = ({children}: Props) => {
           }
         }}>
         {(visibleKeyboard || visibleAddOn) && (
-          <View>
+          <View
+            style={{
+              flexDirection: 'row',
+              borderBottomWidth: 1,
+              borderBottomColor: '#eee',
+            }}>
             {[1, 2, 3].map((n, i) => (
-              <TouchableOpacity key={i} onPress={() => handleActivateAddOn(i)}>
-                <Text>ADD ON - Tab - {i}</Text>
+              <TouchableOpacity
+                style={{
+                  padding: 10,
+                  backgroundColor: i === selectedIndex ? '#eee' : '#fff',
+                }}
+                key={i}
+                onPress={() => handleActivateAddOn(i)}>
+                <Text>ADD ON {i}</Text>
               </TouchableOpacity>
             ))}
           </View>
         )}
         {!visibleKeyboard && visibleAddOn && (
-          <Animated.View style={addOnViewStyle}>
+          <Animated.View
+            style={[
+              {justifyContent: 'center', alignItems: 'center'},
+              addOnViewStyle,
+            ]}>
             {[1, 2, 3].map((n, i) =>
               selectedIndex === i ? (
                 <View key={i}>
