@@ -6,12 +6,14 @@ import {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const useInteraction = () => {
   const [visibleKeyboard, setVisibleKeyboard] = useState<boolean>(false);
   const keyboardHeight = useSharedValue<number>(0);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const bottomContainerHeight = useSharedValue<number>(0);
+
   const bottomContainerViewStyle = useAnimatedStyle(() => {
     return {
       height: bottomContainerHeight.value,

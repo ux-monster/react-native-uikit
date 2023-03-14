@@ -14,6 +14,7 @@ import {Keyboard, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {RootSiblingParent} from 'react-native-root-siblings';
 import KeyboardAttachedView from '@/components/KeyboardAttachedView';
 import Example from '@/components/TimerView/Example';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const BottomSheetExample = () => {
   const [visible, setVisible] = useState(false);
@@ -85,15 +86,17 @@ const KeyboardAttachedViewExample = () => {
 const App = () => {
   return (
     <RootSiblingParent>
-      <View style={{flex: 1}}>
-        {/* <BottomSheetExample /> */}
-        {/* <DraggableListExample type="longpress" /> */}
-        {/* <DraggableListExample type="normal" /> */}
-        {/* <ToastExample /> */}
-        <KeyboardAttachedViewExample />
-        {/* <TimerView /> */}
-        {/* <Example /> */}
-      </View>
+      <SafeAreaProvider>
+        <View style={{flex: 1}}>
+          {/* <BottomSheetExample /> */}
+          {/* <DraggableListExample type="longpress" /> */}
+          {/* <DraggableListExample type="normal" /> */}
+          {/* <ToastExample /> */}
+          <KeyboardAttachedViewExample />
+          {/* <TimerView /> */}
+          {/* <Example /> */}
+        </View>
+      </SafeAreaProvider>
     </RootSiblingParent>
   );
 };
