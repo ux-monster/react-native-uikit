@@ -40,13 +40,37 @@ const KeyboardAttachedView = ({children}: Props) => {
   } = useInteraction();
 
   const {height, width} = useWindowDimensions();
+  const deviceHeight = height - (StatusBar.currentHeight || 0);
+  const [focused, setFocused] = useState(false);
+  const [scrollViewHeight, setScrollViewHeight] = useState(0);
 
-  const [] = useState(false);
+  const [showSoftInputOnFocus, setShowSoftInputOnFocus] = useState(true);
+
+  useEffect(() => {}, []);
 
   return (
-    <View style={[styles.container]}>
-      <TouchableWithoutFeedback onPress={handleBlur}>
-        <Animated.ScrollView>
+    <View
+      style={[
+        styles.container,
+        {
+          height: deviceHeight,
+        },
+        !visibleKeyboard && {
+          position: 'absolute',
+          bottom: 0,
+        },
+      ]}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          handleBlur();
+          focused && setFocused(false);
+        }}>
+        <Animated.ScrollView
+          style={
+            {
+              // height: scrollViewHeight,
+            }
+          }>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n, i) => (
             <View
               key={i}
@@ -57,59 +81,56 @@ const KeyboardAttachedView = ({children}: Props) => {
                 marginVertical: 10,
                 marginHorizontal: 10,
               }}>
-              <Text style={{fontSize: 14}}>Hello!</Text>
+              <Text style={{fontSize: 14}}>Hello! {i}</Text>
             </View>
           ))}
         </Animated.ScrollView>
       </TouchableWithoutFeedback>
-      <TouchableOpacity
-        onPress={() => {
-          console.log('pressed');
-        }}
-        style={{
-          borderTopWidth: 1,
-          borderBottomWidth: 1,
-          borderColor: '#eee',
-        }}>
-        <TextInput
-          style={{
-            backgroundColor: '#fff',
-          }}
-          ref={textInputRef}
-          placeholder="Enter input"
-          showSoftInputOnFocus={!visibleAddOn}
-          onPressIn={() => {
-            handleBlur();
-            textInputRef.current?.focus();
-          }}
-          onBlur={() => {
-            // textInputRef.current?.focus();
-          }}
-        />
-      </TouchableOpacity>
       <Animated.View
-        style={[
-          {backgroundColor: '#fff'},
-          visibleAddOn && bottomContainerViewStyle,
-          !visibleAddOn && {height: 'auto'},
-        ]}
+        style={[{flexDirection: 'column'}]}
         onLayout={e => {
-          console.log(
-            'onLayout',
-            visibleKeyboard,
-            visibleAddOn,
-            bottomContainerHeight.value,
-          );
-          if (visibleAddOn && bottomContainerHeight.value === 0) {
-            bottomContainerHeight.value = e.nativeEvent.layout.height;
+          if (scrollViewHeight === 0) {
+            setScrollViewHeight(deviceHeight - e.nativeEvent.layout.height);
           }
         }}>
-        {(visibleKeyboard || visibleAddOn) && (
+        <TouchableOpacity
+          onPress={() => {
+            console.log('pressed');
+          }}
+          style={[
+            {
+              borderTopWidth: 1,
+              borderBottomWidth: 1,
+              borderColor: '#eee',
+              width: '100%',
+            },
+          ]}>
+          <TextInput
+            style={{
+              backgroundColor: '#fff',
+            }}
+            ref={textInputRef}
+            placeholder="Enter input"
+            showSoftInputOnFocus={showSoftInputOnFocus}
+            onPressIn={() => {
+              setShowSoftInputOnFocus(true);
+              handleBlur();
+              textInputRef.current?.focus();
+              !focused && setFocused(true);
+            }}
+            onBlur={() => {
+              // textInputRef.current?.focus();
+            }}
+          />
+        </TouchableOpacity>
+        {focused && (
           <View
             style={{
               flexDirection: 'row',
               borderBottomWidth: 1,
-              borderBottomColor: '#eee',
+              borderBottomColor: '#fff',
+              width: '100%',
+              backgroundColor: '#fff',
             }}>
             {[1, 2, 3].map((n, i) => (
               <TouchableOpacity
@@ -118,25 +139,48 @@ const KeyboardAttachedView = ({children}: Props) => {
                   backgroundColor: i === selectedIndex ? '#eee' : '#fff',
                 }}
                 key={i}
-                onPress={() => handleActivateAddOn(i)}>
+                onPress={() => {
+                  setShowSoftInputOnFocus(selectedIndex === i);
+                  handleActivateAddOn(i);
+                }}>
                 <Text>ADD ON {i}</Text>
               </TouchableOpacity>
             ))}
           </View>
         )}
-        {!visibleKeyboard && visibleAddOn && (
+        {focused && (
           <Animated.View
             style={[
-              {justifyContent: 'center', alignItems: 'center'},
-              addOnViewStyle,
-            ]}>
-            {[1, 2, 3].map((n, i) =>
-              selectedIndex === i ? (
-                <View key={i}>
-                  <Text>ADD ON - View - {i}</Text>
-                </View>
-              ) : null,
-            )}
+              {backgroundColor: '#fff'},
+              visibleAddOn && bottomContainerViewStyle,
+              !visibleAddOn && {height: 'auto'},
+            ]}
+            onLayout={e => {
+              console.log(
+                'onLayout',
+                visibleKeyboard,
+                visibleAddOn,
+                bottomContainerHeight.value,
+              );
+              if (visibleAddOn && bottomContainerHeight.value === 0) {
+                bottomContainerHeight.value = e.nativeEvent.layout.height;
+              }
+            }}>
+            {/* {!visibleKeyboard && visibleAddOn && ( */}
+            <Animated.View
+              style={[
+                {justifyContent: 'center', alignItems: 'center'},
+                addOnViewStyle,
+              ]}>
+              {[1, 2, 3].map((n, i) =>
+                selectedIndex === i ? (
+                  <View key={i}>
+                    <Text>ADD ON - View - {i}</Text>
+                  </View>
+                ) : null,
+              )}
+            </Animated.View>
+            {/* )} */}
           </Animated.View>
         )}
       </Animated.View>
@@ -148,7 +192,8 @@ export default KeyboardAttachedView;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    width: '100%',
     backgroundColor: '#eee',
   },
   bottomContainer: {

@@ -83,13 +83,11 @@ const useInteraction = () => {
 
   const handleActivateAddOn = (tabIndex: number) => {
     if (tabIndex === selectedIndex) {
-      Keyboard.dismiss();
-      textInputRef.current?.focus();
       setSelectedIndex(-1);
       setTimeout(() => {
+        Keyboard.dismiss();
         textInputRef.current?.focus();
-        // setVisibleAddOn(false);
-      }, 500);
+      }, 200);
     } else {
       Keyboard.dismiss();
       setVisibleAddOn(true);
