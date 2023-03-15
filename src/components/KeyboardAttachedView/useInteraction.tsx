@@ -1,12 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Keyboard, Platform, KeyboardEvent, TextInput} from 'react-native';
-import {
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 
 const useInteraction = () => {
   const [visibleKeyboard, setVisibleKeyboard] = useState<boolean>(false);

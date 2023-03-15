@@ -1,9 +1,6 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {
-  Dimensions,
   Keyboard,
-  KeyboardAvoidingView,
-  KeyboardEvent,
   Platform,
   StatusBar,
   StyleSheet,
@@ -14,12 +11,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-import ScrollableTabView from '../ScrollableTabView';
+import Animated from 'react-native-reanimated';
 import useInteraction from './useInteraction';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -57,10 +49,7 @@ const KeyboardAttachedView = ({children}: Props) => {
         {
           height: deviceHeight,
         },
-        !visibleKeyboard && {
-          position: 'absolute',
-          bottom: 0,
-        },
+        !visibleKeyboard && styles.absoluteContainer,
       ]}>
       <TouchableWithoutFeedback>
         <Animated.ScrollView keyboardShouldPersistTaps="handled">
@@ -87,7 +76,7 @@ const KeyboardAttachedView = ({children}: Props) => {
           </TouchableOpacity>
         </Animated.ScrollView>
       </TouchableWithoutFeedback>
-      <Animated.View
+      <View
         style={[{flexDirection: 'column'}]}
         onLayout={e => {
           if (scrollViewHeight === 0) {
@@ -98,24 +87,17 @@ const KeyboardAttachedView = ({children}: Props) => {
           onPress={() => {
             console.log('pressed');
           }}
-          style={[
-            {
-              borderTopWidth: 1,
-              borderBottomWidth: 1,
-              borderColor: '#eee',
-              width: '100%',
-              backgroundColor: '#fff',
-            },
-          ]}>
+          style={[styles.textInputContainer]}>
           <TextInput
+            returnKeyType="send"
+            onSubmitEditing={() => {
+              Keyboard.dismiss();
+              handleBlur();
+              focused && setFocused(false);
+            }}
             style={[
-              {
-                backgroundColor: '#fff',
-              },
-              Platform.OS === 'ios' && {
-                padding: 10,
-                fontSize: 16,
-              },
+              styles.textInput,
+              Platform.OS === 'ios' && styles.textInputIOS,
             ]}
             ref={textInputRef}
             placeholder="Enter input"
@@ -137,23 +119,18 @@ const KeyboardAttachedView = ({children}: Props) => {
           />
         </TouchableOpacity>
         {!focused && (
-          <View style={{height: insets.bottom, backgroundColor: '#fff'}} />
+          <View style={[{height: insets.bottom}, styles.bottomSpace]} />
         )}
         {focused && (
-          <View
-            style={{
-              flexDirection: 'row',
-              borderBottomWidth: 1,
-              borderBottomColor: '#fff',
-              width: '100%',
-              backgroundColor: '#fff',
-            }}>
+          <View style={styles.addOnTabContainer}>
             {[1, 2, 3].map((n, i) => (
               <TouchableOpacity
-                style={{
-                  padding: 10,
-                  backgroundColor: i === selectedIndex ? '#eee' : '#fff',
-                }}
+                style={[
+                  styles.addOnTab,
+                  {
+                    backgroundColor: i === selectedIndex ? '#eee' : '#fff',
+                  },
+                ]}
                 key={i}
                 onPress={() => {
                   setShowSoftInputOnFocus(selectedIndex === i);
@@ -167,7 +144,7 @@ const KeyboardAttachedView = ({children}: Props) => {
         {focused && (
           <Animated.View
             style={[
-              {backgroundColor: '#fff'},
+              styles.addOnViewContainer,
               visibleAddOn && bottomContainerViewStyle,
               !visibleAddOn && {height: 'auto'},
             ]}
@@ -183,11 +160,7 @@ const KeyboardAttachedView = ({children}: Props) => {
               }
             }}>
             {/* {!visibleKeyboard && visibleAddOn && ( */}
-            <Animated.View
-              style={[
-                {justifyContent: 'center', alignItems: 'center'},
-                addOnViewStyle,
-              ]}>
+            <Animated.View style={[styles.addOnView, addOnViewStyle]}>
               {[1, 2, 3].map((n, i) =>
                 selectedIndex === i ? (
                   <View key={i}>
@@ -199,7 +172,7 @@ const KeyboardAttachedView = ({children}: Props) => {
             {/* )} */}
           </Animated.View>
         )}
-      </Animated.View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -211,7 +184,42 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#eee',
   },
-  bottomContainer: {
-    backgroundColor: 'rgba(0,0,0,0.1)',
+  absoluteContainer: {
+    position: 'absolute',
+    bottom: 0,
+  },
+  textInputContainer: {
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#eee',
+    width: '100%',
+    backgroundColor: '#fff',
+  },
+  textInput: {
+    backgroundColor: '#fff',
+  },
+  textInputIOS: {
+    padding: 10,
+    fontSize: 16,
+  },
+  bottomSpace: {
+    backgroundColor: '#fff',
+  },
+  addOnTabContainer: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#fff',
+    width: '100%',
+    backgroundColor: '#fff',
+  },
+  addOnTab: {
+    padding: 10,
+  },
+  addOnViewContainer: {
+    backgroundColor: '#fff',
+  },
+  addOnView: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
