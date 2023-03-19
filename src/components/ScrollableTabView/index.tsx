@@ -21,7 +21,7 @@ const ScrollableTabView = (props: Props) => {
       </View>
       <Animated.FlatList
         style={styles.contentViewList}
-        data={[]}
+        data={[1, 2, 3, 4, 5]}
         renderItem={() => (
           <View style={styles.contentView}>
             <Text>Page</Text>
