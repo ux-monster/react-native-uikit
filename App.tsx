@@ -1,7 +1,11 @@
 // Develop File
-import {BottomSheet, TimerView} from './src';
-import {DraggableListView} from './src';
-import {Toast} from './src';
+import {
+  BottomSheet,
+  ScrollableTabView,
+  DraggableListView,
+  Toast,
+  KeyboardAttachedView,
+} from './src';
 
 // Build File
 // import {BottomSheet} from './npm';
@@ -12,8 +16,6 @@ import {Toast} from './src';
 import React, {useState} from 'react';
 import {Keyboard, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {RootSiblingParent} from 'react-native-root-siblings';
-import KeyboardAttachedView from '@/components/KeyboardAttachedView';
-import Example from '@/components/TimerView/Example';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const BottomSheetExample = () => {
@@ -82,6 +84,9 @@ const ToastExample = () => {
 const KeyboardAttachedViewExample = () => {
   return <KeyboardAttachedView />;
 };
+const ScrollableTabViewExample = () => {
+  return <ScrollableTabView />;
+};
 
 const App = () => {
   return (
@@ -92,7 +97,8 @@ const App = () => {
           {/* <DraggableListExample type="longpress" /> */}
           {/* <DraggableListExample type="normal" /> */}
           {/* <ToastExample /> */}
-          <KeyboardAttachedViewExample />
+          {/* <KeyboardAttachedViewExample /> */}
+          <ScrollableTabViewExample />
           {/* <TimerView /> */}
           {/* <Example /> */}
         </View>
