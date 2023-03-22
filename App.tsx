@@ -17,6 +17,7 @@ import React, {useState} from 'react';
 import {Keyboard, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {RootSiblingParent} from 'react-native-root-siblings';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import Test from '@/components/Test';
 
 const BottomSheetExample = () => {
   const [visible, setVisible] = useState(false);
@@ -98,9 +99,10 @@ const App = () => {
           {/* <DraggableListExample type="normal" /> */}
           {/* <ToastExample /> */}
           {/* <KeyboardAttachedViewExample /> */}
-          <ScrollableTabViewExample />
+          {/* <ScrollableTabViewExample /> */}
           {/* <TimerView /> */}
           {/* <Example /> */}
+          <Test />
         </View>
       </SafeAreaProvider>
     </RootSiblingParent>
