@@ -18,6 +18,8 @@ import {Keyboard, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {RootSiblingParent} from 'react-native-root-siblings';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Test from '@/components/Test';
+import {NavigationContainer} from '@react-navigation/native';
+import RootNavigation from '@/navigation';
 
 const BottomSheetExample = () => {
   const [visible, setVisible] = useState(false);
@@ -91,21 +93,24 @@ const ScrollableTabViewExample = () => {
 
 const App = () => {
   return (
-    <RootSiblingParent>
-      <SafeAreaProvider>
-        <View style={{flex: 1}}>
-          {/* <BottomSheetExample /> */}
-          {/* <DraggableListExample type="longpress" /> */}
-          {/* <DraggableListExample type="normal" /> */}
-          {/* <ToastExample /> */}
-          {/* <KeyboardAttachedViewExample /> */}
-          {/* <ScrollableTabViewExample /> */}
-          {/* <TimerView /> */}
-          {/* <Example /> */}
-          <Test />
-        </View>
-      </SafeAreaProvider>
-    </RootSiblingParent>
+    <NavigationContainer>
+      <RootSiblingParent>
+        <SafeAreaProvider>
+          <RootNavigation />
+          <View style={{flex: 1}}>
+            {/* <BottomSheetExample /> */}
+            {/* <DraggableListExample type="longpress" /> */}
+            {/* <DraggableListExample type="normal" /> */}
+            {/* <ToastExample /> */}
+            {/* <KeyboardAttachedViewExample /> */}
+            {/* <ScrollableTabViewExample /> */}
+            {/* <TimerView /> */}
+            {/* <Example /> */}
+            <Test />
+          </View>
+        </SafeAreaProvider>
+      </RootSiblingParent>
+    </NavigationContainer>
   );
 };
 
