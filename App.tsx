@@ -17,7 +17,6 @@ import React, {useState} from 'react';
 import {Keyboard, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {RootSiblingParent} from 'react-native-root-siblings';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import Test from '@/components/Test';
 import {NavigationContainer} from '@react-navigation/native';
 import RootNavigation from '@/navigation';
 
@@ -96,17 +95,16 @@ const App = () => {
     <NavigationContainer>
       <RootSiblingParent>
         <SafeAreaProvider>
-          <RootNavigation />
+          {/* <RootNavigation /> */}
           <View style={{flex: 1}}>
             {/* <BottomSheetExample /> */}
             {/* <DraggableListExample type="longpress" /> */}
             {/* <DraggableListExample type="normal" /> */}
             {/* <ToastExample /> */}
             {/* <KeyboardAttachedViewExample /> */}
-            {/* <ScrollableTabViewExample /> */}
+            <ScrollableTabViewExample />
             {/* <TimerView /> */}
             {/* <Example /> */}
-            <Test />
           </View>
         </SafeAreaProvider>
       </RootSiblingParent>

@@ -1,101 +1,55 @@
-import React, {useState} from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Animated from 'react-native-reanimated';
 
-type Props = {};
+const tabs = [
+  'Hello',
+  'Pepsi Cola',
+  'Amazon Web Service',
+  'Water',
+  'JavaScript',
+  'Design',
+  'Muzli',
+  'Github',
+  'Coursera',
+  'Reddit',
+];
+
+interface Props {}
 
 const ScrollableTabView = (props: Props) => {
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-
   return (
-    <View style={styles.container}>
-      <View style={styles.tabListContainer}>
-        {/* Tab List */}
-        <Animated.ScrollView
-          style={styles.tabList}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}>
-          {[
-            'Hello',
-            'Pepsi Cola',
-            'Amazon Web Service',
-            'Water',
-            'JavaScript',
-          ].map((o, i) => (
-            <TouchableOpacity
-              onPress={() => {
-                setSelectedTabIndex(i);
-              }}
-              key={i}
-              style={[styles.tab]}>
-              <Text
-                style={[
-                  selectedTabIndex === i && {
-                    fontWeight: 'bold',
-                  },
-                ]}>
-                {o}
-              </Text>
+    <View>
+      {/* Tab Container */}
+      <View>
+        {/* Tab Slider */}
+        <View>
+          {/* Tab */}
+          {tabs.map((tab, i) => (
+            <TouchableOpacity key={i}>
+              <Text>{tab}</Text>
             </TouchableOpacity>
           ))}
-        </Animated.ScrollView>
-        {/* Bar or Marker */}
-        <View style={styles.bar} />
+        </View>
+        {/* Tab Bar */}
+        <View style={{}} />
       </View>
-      <Animated.FlatList
-        initialScrollIndex={0}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        snapToAlignment={'center'}
-        onScroll={e => {
-          const width = Dimensions.get('window').width;
-          const index = Math.floor(e.nativeEvent.contentOffset.x / width + 0.1);
-          console.log(e.nativeEvent.contentOffset.x, width);
-          if (index !== selectedTabIndex) {
-            setSelectedTabIndex(index);
-          }
-        }}
-        pagingEnabled={true}
-        style={styles.contentViewList}
-        data={[0, 1, 2, 3, 4]}
-        renderItem={({item}) => (
-          <View
-            style={[styles.contentView, {backgroundColor: sampleColors[item]}]}>
-            <Text>Page</Text>
-          </View>
-        )}
-      />
+      {/* Page Container */}
+      <View>
+        {/* Page Slider */}
+        <View>
+          {/* Page */}
+          {tabs.map((page, i) => (
+            <View key={i}>
+              <Text>{page}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
     </View>
   );
 };
 
-const sampleColors = ['#aeff00', '#d9ff1b', '#dcff4e', '#deff9c', '#f8ffcd'];
-
 export default ScrollableTabView;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'aqua',
-  },
-  tabListContainer: {},
-  tabList: {},
-  tab: {
-    padding: 20,
-  },
-  bar: {},
-  contentViewList: {
-    backgroundColor: 'black',
-  },
-  contentView: {
-    height: '100%',
-    width: Dimensions.get('window').width,
-    backgroundColor: 'yellow',
-  },
-});
+const styles = StyleSheet.create({});
