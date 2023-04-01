@@ -1,5 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Gesture} from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 
 const tabs = [
@@ -18,6 +19,9 @@ const tabs = [
 interface Props {}
 
 const ScrollableTabView = (props: Props) => {
+  const tabSliderGesture = Gesture.Pan();
+  const pageSliderGesture = Gesture.Pan();
+
   return (
     <View>
       {/* Tab Container */}
