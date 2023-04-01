@@ -1,7 +1,13 @@
 import React, {useRef, useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Gesture} from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
+import Animated, {interpolate} from 'react-native-reanimated';
 
 const tabs = [
   'Hello',
@@ -21,6 +27,22 @@ interface Props {}
 const ScrollableTabView = (props: Props) => {
   const tabSliderGesture = Gesture.Pan();
   const pageSliderGesture = Gesture.Pan();
+
+  const widthInterpolate = (targetValue: number) => {
+    const pageWidth = Dimensions.get('window').width;
+    const tabWidthArray = [0, 0, 0, 0, 0];
+
+    const currentIndex = 0;
+    const nextIndex = 0;
+
+    const currentWidth = tabWidthArray[currentIndex];
+    const nextWidth = tabWidthArray[nextIndex];
+
+    const scrollInput = [currentIndex * pageWidth, nextIndex * pageWidth];
+    const widthOutput = [currentWidth, nextWidth];
+
+    return interpolate(targetValue, scrollInput, widthOutput);
+  };
 
   return (
     <View>
