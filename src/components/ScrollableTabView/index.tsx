@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react';
 import {
   Dimensions,
+  LayoutChangeEvent,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -9,39 +10,57 @@ import {
 import {Gesture} from 'react-native-gesture-handler';
 import Animated, {interpolate} from 'react-native-reanimated';
 
-const tabs = [
-  'Hello',
-  'Pepsi Cola',
-  'Amazon Web Service',
-  'Water',
-  'JavaScript',
-  'Design',
-  'Muzli',
-  'Github',
-  'Coursera',
-  'Reddit',
-];
-
 interface Props {}
+
+interface Tab {
+  id: string;
+  name: string;
+}
+
+interface TabWidthList {
+  [key: string]: number;
+}
 
 const ScrollableTabView = (props: Props) => {
   const tabSliderGesture = Gesture.Pan();
   const pageSliderGesture = Gesture.Pan();
 
-  const widthInterpolate = (targetValue: number) => {
+  const [tabs, setTabs] = useState<Tab[]>([
+    {id: '0', name: 'Hello'},
+    {id: '1', name: 'Pepsi Cola'},
+    {id: '2', name: 'Amazon Web Service'},
+    {id: '3', name: 'Water'},
+    {id: '4', name: 'JavaScript'},
+    {id: '5', name: 'Design'},
+    {id: '6', name: 'Muzli'},
+    {id: '7', name: 'Github'},
+    {id: '8', name: 'Coursera'},
+    {id: '9', name: 'Reddit'},
+  ]);
+
+  const tabWdthList = useRef<TabWidthList>({});
+
+  const handleLayoutTab = (e: LayoutChangeEvent, tab: Tab) => {
+    tabWdthList.current[tab.id] = e.nativeEvent.layout.width;
+  };
+
+  const widthInterpolate = (
+    scrollValue: number,
+    currentTab: Tab,
+    nextTab: Tab,
+  ) => {
     const pageWidth = Dimensions.get('window').width;
-    const tabWidthArray = [0, 0, 0, 0, 0];
 
-    const currentIndex = 0;
-    const nextIndex = 0;
+    const currentTabIndex = tabs.findIndex(tab => tab.id === currentTab.id);
+    const nextTabIndex = tabs.findIndex(tab => tab.id === nextTab.id);
 
-    const currentWidth = tabWidthArray[currentIndex];
-    const nextWidth = tabWidthArray[nextIndex];
+    const currentTabWidth = tabWdthList.current[currentTabIndex];
+    const nextTabWidth = tabWdthList.current[nextTabIndex];
 
-    const scrollInput = [currentIndex * pageWidth, nextIndex * pageWidth];
-    const widthOutput = [currentWidth, nextWidth];
+    const scrollInput = [currentTabIndex * pageWidth, nextTabIndex * pageWidth];
+    const widthOutput = [currentTabWidth, nextTabWidth];
 
-    return interpolate(targetValue, scrollInput, widthOutput);
+    return interpolate(scrollValue, scrollInput, widthOutput);
   };
 
   return (
@@ -52,8 +71,8 @@ const ScrollableTabView = (props: Props) => {
         <View>
           {/* Tab */}
           {tabs.map((tab, i) => (
-            <TouchableOpacity key={i}>
-              <Text>{tab}</Text>
+            <TouchableOpacity key={i} onLayout={e => handleLayoutTab(e, tab)}>
+              <Text>{tab.name}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -67,7 +86,7 @@ const ScrollableTabView = (props: Props) => {
           {/* Page */}
           {tabs.map((page, i) => (
             <View key={i}>
-              <Text>{page}</Text>
+              <Text>{page.name}</Text>
             </View>
           ))}
         </View>
