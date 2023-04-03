@@ -10,7 +10,9 @@ import {
 import {Gesture} from 'react-native-gesture-handler';
 import Animated, {interpolate} from 'react-native-reanimated';
 
-interface Props {}
+interface Props {
+  tabs: Tab[];
+}
 
 interface Tab {
   id: string;
@@ -21,11 +23,8 @@ interface TabWidthList {
   [key: string]: number;
 }
 
-const ScrollableTabView = (props: Props) => {
-  const tabSliderGesture = Gesture.Pan();
-  const pageSliderGesture = Gesture.Pan();
-
-  const [tabs, setTabs] = useState<Tab[]>([
+const ScrollableTabView = ({
+  tabs = [
     {id: '0', name: 'Hello'},
     {id: '1', name: 'Pepsi Cola'},
     {id: '2', name: 'Amazon Web Service'},
@@ -36,7 +35,10 @@ const ScrollableTabView = (props: Props) => {
     {id: '7', name: 'Github'},
     {id: '8', name: 'Coursera'},
     {id: '9', name: 'Reddit'},
-  ]);
+  ],
+}: Props) => {
+  const tabSliderGesture = Gesture.Pan();
+  const pageSliderGesture = Gesture.Pan();
 
   const tabWdthList = useRef<TabWidthList>({});
 
