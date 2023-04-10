@@ -22,3 +22,10 @@
 
 - use interaction
 - use api
+
+## Event handler
+
+- press
+- longPress
+- drag
+- drop
